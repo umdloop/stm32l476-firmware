@@ -1,2 +1,0 @@
-../App/systems/blink_system.c:8:6:BlinkSystem_Init	8	static
-../App/systems/blink_system.c:13:6:BlinkSystem_Tick	4	static

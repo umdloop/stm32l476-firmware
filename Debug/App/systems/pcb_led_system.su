@@ -1,2 +1,2 @@
-../App/systems/pcb_led_system.c:7:6:PcbLedSystem_Init	16	static
-../App/systems/pcb_led_system.c:14:6:PcbLedSystem_Tick	16	static
+../App/systems/pcb_led_system.c:9:13:init_once	8	static
+../App/systems/pcb_led_system.c:15:6:pcb_led_system_controller	16	static

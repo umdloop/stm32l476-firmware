@@ -1,3 +1,4 @@
-../App/rr/rr_scheduler.c:30:13:RR_Register	16	static
-../App/rr/rr_scheduler.c:40:6:RR_Scheduler_Init	16	static
-../App/rr/rr_scheduler.c:65:6:RR_Scheduler_Tick	16	static
+../App/rr/rr_scheduler.c:10:6:RR_Scheduler_Init	16	static
+../App/rr/rr_scheduler.c:19:6:RR_AddController	24	static
+../App/rr/rr_scheduler.c:44:6:RR_RemoveController	24	static
+../App/rr/rr_scheduler.c:69:6:RR_Scheduler_Tick	16	static

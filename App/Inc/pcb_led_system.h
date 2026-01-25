@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-void PcbLedSystem_Init(void);
-void PcbLedSystem_Tick(void);
+/* Round-robin scheduled controller */
+void pcb_led_system_controller(void);
 
 #ifdef __cplusplus
 }

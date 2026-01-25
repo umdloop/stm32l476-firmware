@@ -1,0 +1,7 @@
+BO_ 128 STEPPER_COMMAND: 8 Vector__XXX
+	SG_ Command_Byte M : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+	SG_ Set_Angle_Target_One m32M : 8|16@1- (2,0) [-360|360] "deg" Vector__XXX
+	SG_ Set_Angle_Target_Two m33M : 8|16@1- (2,0) [-360|360] "deg" Vector__XXX
+	SG_ Set_Speed_Target_One m48M : 8|16@1- (1,0) [-60|60] "rev/s" Vector__XXX
+	SG_ Set_Speed_Target_Two m49M : 8|16@1- (1,0) [-60|0] "rev/s" Vector__XXX
+	SG_ Set_LED m144M : 8|1@1+ (1,0) [0|1] "bool" Vector__XXX

@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-void CanSystem_Init(void);
-void CanSystem_Tick(void);
+/* Round-robin scheduled controller */
+void can_system_controller(void);
 
 #ifdef __cplusplus
 }

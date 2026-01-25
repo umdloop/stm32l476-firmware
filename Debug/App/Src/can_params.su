@@ -1,2 +1,14 @@
-../App/Src/can_params.c:9:6:CanParams_Get_SetLED	4	static
-../App/Src/can_params.c:15:6:CanParams__Set_SetLED	16	static
+../App/Src/can_params.c:37:6:CanParams__Reset	16	static
+../App/Src/can_params.c:50:6:CanParams__Create	24	static
+../App/Src/can_params.c:82:6:CanParams__UpdateBool	24	static
+../App/Src/can_params.c:97:6:CanParams__UpdateInt32	24	static
+../App/Src/can_params.c:112:6:CanParams__UpdateFloat	24	static
+../App/Src/can_params.c:131:28:find_param	24	static
+../App/Src/can_params.c:148:22:find_param_mut	16	static
+../App/Src/can_params.c:153:6:CanParams_IsValid	24	static
+../App/Src/can_params.c:159:6:CanParams_GetBool	24	static
+../App/Src/can_params.c:176:6:CanParams_GetInt32	24	static
+../App/Src/can_params.c:193:6:CanParams_GetFloat	24	static
+../App/Src/can_params.c:214:6:CanParams_SetBool	24	static
+../App/Src/can_params.c:227:6:CanParams_SetInt32	24	static
+../App/Src/can_params.c:240:6:CanParams_SetFloat	24	static

@@ -5,17 +5,14 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../App/systems/blink_system.c \
 ../App/systems/can_system.c \
 ../App/systems/pcb_led_system.c 
 
 OBJS += \
-./App/systems/blink_system.o \
 ./App/systems/can_system.o \
 ./App/systems/pcb_led_system.o 
 
 C_DEPS += \
-./App/systems/blink_system.d \
 ./App/systems/can_system.d \
 ./App/systems/pcb_led_system.d 
 
@@ -27,7 +24,7 @@ App/systems/%.o App/systems/%.su App/systems/%.cyclo: ../App/systems/%.c App/sys
 clean: clean-App-2f-systems
 
 clean-App-2f-systems:
-	-$(RM) ./App/systems/blink_system.cyclo ./App/systems/blink_system.d ./App/systems/blink_system.o ./App/systems/blink_system.su ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su
+	-$(RM) ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su
 
 .PHONY: clean-App-2f-systems
 

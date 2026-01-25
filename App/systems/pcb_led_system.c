@@ -4,15 +4,31 @@
 #include "can_params.h"
 #include "main.h"
 
-void PcbLedSystem_Init(void)
+static uint8_t s_inited = 0;
+
+static void init_once(void)
 {
-  /* Ensure LED starts OFF by default (or follow current param) */
-  const bool on = CanParams_Get_SetLED();
-  HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  /* Default LED OFF until parameter becomes valid */
+  HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, GPIO_PIN_RESET);
 }
 
-void PcbLedSystem_Tick(void)
+void pcb_led_system_controller(void)
 {
-  const bool on = CanParams_Get_SetLED();
-  HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  if (!s_inited)
+  {
+    s_inited = 1U;
+    init_once();
+  }
+
+  bool on = false;
+
+  /* Only act when signal exists+valid. If not valid yet, keep OFF. */
+  if (CanParams_GetBool("STEPPER_COMMAND.Set_LED", &on))
+  {
+    HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  }
+  else
+  {
+    HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, GPIO_PIN_RESET);
+  }
 }

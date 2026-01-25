@@ -5,17 +5,21 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-/*
- * CAN Parameters (derived from DBC signals)
- *
- * For now: only STEPPER_COMMAND (ID 128 / 0x80) :: Set_LED
- */
+/* Parameter lookup/access by full signal name: "MESSAGE.SIGNAL" */
 
-/* Returns the latest decoded value of STEPPER_COMMAND.Set_LED */
-bool CanParams_Get_SetLED(void);
+bool CanParams_IsValid(const char* full_name);
+
+bool CanParams_GetBool(const char* full_name, bool* out_value);
+bool CanParams_GetInt32(const char* full_name, int32_t* out_value);
+bool CanParams_GetFloat(const char* full_name, float* out_value);
+
+/* (Optional future) setters for TX use. Not used yet. */
+bool CanParams_SetBool(const char* full_name, bool value);
+bool CanParams_SetInt32(const char* full_name, int32_t value);
+bool CanParams_SetFloat(const char* full_name, float value);
 
 #ifdef __cplusplus
 }
