@@ -4,7 +4,7 @@
 #include "can_params.h"
 #include "main.h"
 
-static uint8_t s_inited = 0;
+static uint8_t s_inited = 0U;
 
 static void init_once(void)
 {
@@ -22,8 +22,13 @@ void pcb_led_system_controller(void)
 
   bool on = false;
 
-  /* Only act when signal exists+valid. If not valid yet, keep OFF. */
-  if (CanParams_GetBool("STEPPER_COMMAND.Set_LED", &on))
+  /*
+   * LED control comes from the DBC-defined CAN parameter:
+   *   SERVO_PCB_C.led_status   (muxed under SERVO_PCB_C.cmd == 17 / 0x11)
+   *
+   * Only act when the parameter exists + is valid. If not valid yet, keep OFF.
+   */
+  if (CanParams_GetBool("SERVO_PCB_C.led_status", &on))
   {
     HAL_GPIO_WritePin(LED_GPIO_PORT, LED_GPIO_PIN, on ? GPIO_PIN_SET : GPIO_PIN_RESET);
   }

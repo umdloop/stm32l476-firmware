@@ -16,8 +16,8 @@ void can_system_controller(void);
  *
  * Any system may call these to request that a CAN parameter be updated.
  * If the parameter corresponds to a DBC-defined signal, the CAN system will
- * mark the corresponding message as dirty and transmit it on its next
- * round-robin tick.
+ * mark the corresponding message (and mux page, if applicable) as dirty and
+ * transmit it on its next round-robin tick.
  *
  * These functions will set the global CAN parameter "pending_outbox" to true.
  */
