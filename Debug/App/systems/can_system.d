@@ -27,7 +27,8 @@ App/systems/can_system.o: ../App/systems/can_system.c \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
+ ../App/Inc/can_params.h ../App/Inc/can_config.h
 ../App/Inc/can_system.h:
 ../Platform/Inc/can.h:
 ../Core/Inc/main.h:
@@ -59,3 +60,5 @@ App/systems/can_system.o: ../App/systems/can_system.c \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h:
+../App/Inc/can_params.h:
+../App/Inc/can_config.h:

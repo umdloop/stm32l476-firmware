@@ -1,0 +1,3 @@
+../App/systems/heartbeat_system.c:10:13:delay_elapsed	2
+../App/systems/heartbeat_system.c:21:13:init_once	1
+../App/systems/heartbeat_system.c:26:6:heartbeat_system_controller	6

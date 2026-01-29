@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../App/Src/can_config.c \
 ../App/Src/can_params.c 
 
 OBJS += \
+./App/Src/can_config.o \
 ./App/Src/can_params.o 
 
 C_DEPS += \
+./App/Src/can_config.d \
 ./App/Src/can_params.d 
 
 
@@ -21,7 +24,7 @@ App/Src/%.o App/Src/%.su App/Src/%.cyclo: ../App/Src/%.c App/Src/subdir.mk
 clean: clean-App-2f-Src
 
 clean-App-2f-Src:
-	-$(RM) ./App/Src/can_params.cyclo ./App/Src/can_params.d ./App/Src/can_params.o ./App/Src/can_params.su
+	-$(RM) ./App/Src/can_config.cyclo ./App/Src/can_config.d ./App/Src/can_config.o ./App/Src/can_config.su ./App/Src/can_params.cyclo ./App/Src/can_params.d ./App/Src/can_params.o ./App/Src/can_params.su
 
 .PHONY: clean-App-2f-Src
 

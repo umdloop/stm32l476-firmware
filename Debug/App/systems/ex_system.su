@@ -1,0 +1,2 @@
+../App/systems/ex_system.c:9:13:init_once	4	static
+../App/systems/ex_system.c:14:6:ex_system_controller	8	static
