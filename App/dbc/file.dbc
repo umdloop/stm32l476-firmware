@@ -142,14 +142,9 @@ BA_ "BusType" "CAN";
 BA_ "DatabaseCompiler" "CSS ELECTRONICS (WWW.CSSELECTRONICS.COM)";
 BA_ "DatabaseVersion" "1.0.0";
 
-
-; ===== Multiplexing maps =====
-
-; 0x080 (128) command mux
 SG_MUL_VAL_ 128 status_heartbeat_delay cmd 16-16;
 SG_MUL_VAL_ 128 led_status cmd 17-17;
 
-; bulk general (cmd = 18 / 0x12)
 SG_MUL_VAL_ 128 general_0 cmd 18-18;
 SG_MUL_VAL_ 128 general_1 cmd 18-18;
 SG_MUL_VAL_ 128 general_2 cmd 18-18;
@@ -157,7 +152,6 @@ SG_MUL_VAL_ 128 general_3 cmd 18-18;
 SG_MUL_VAL_ 128 general_4 cmd 18-18;
 SG_MUL_VAL_ 128 general_5 cmd 18-18;
 
-; position targets: cmd = 32..37 (0x20..0x25)
 SG_MUL_VAL_ 128 motor_position_target_0 cmd 32-32;
 SG_MUL_VAL_ 128 motor_position_target_1 cmd 33-33;
 SG_MUL_VAL_ 128 motor_position_target_2 cmd 34-34;
@@ -165,7 +159,6 @@ SG_MUL_VAL_ 128 motor_position_target_3 cmd 35-35;
 SG_MUL_VAL_ 128 motor_position_target_4 cmd 36-36;
 SG_MUL_VAL_ 128 motor_position_target_5 cmd 37-37;
 
-; velocity targets: cmd = 48..53 (0x30..0x35)
 SG_MUL_VAL_ 128 motor_velocity_target_0 cmd 48-48;
 SG_MUL_VAL_ 128 motor_velocity_target_1 cmd 49-49;
 SG_MUL_VAL_ 128 motor_velocity_target_2 cmd 50-50;
@@ -174,17 +167,14 @@ SG_MUL_VAL_ 128 motor_velocity_target_4 cmd 52-52;
 SG_MUL_VAL_ 128 motor_velocity_target_5 cmd 53-53;
 
 
-; 0x081 (129) response mux
 SG_MUL_VAL_ 129 status_0 req 16-16;
 
-; bulk status (req = 18 / 0x12) — note status_0 stays on req=0x10 in this DBC
 SG_MUL_VAL_ 129 status_1 req 16-16;
 SG_MUL_VAL_ 129 status_2 req 16-16;
 SG_MUL_VAL_ 129 status_3 req 16-16;
 SG_MUL_VAL_ 129 status_4 req 16-16;
 SG_MUL_VAL_ 129 status_5 req 16-16;
 
-; vectors: req = 32..37 (0x20..0x25)
 SG_MUL_VAL_ 129 motor_position_0 req 32-32;
 SG_MUL_VAL_ 129 motor_velocity_0 req 32-32;
 SG_MUL_VAL_ 129 motor_position_1 req 33-33;
@@ -198,7 +188,6 @@ SG_MUL_VAL_ 129 motor_velocity_4 req 36-36;
 SG_MUL_VAL_ 129 motor_position_5 req 37-37;
 SG_MUL_VAL_ 129 motor_velocity_5 req 37-37;
 
-; servo info: req = 48..53 (0x30..0x35)
 SG_MUL_VAL_ 129 servo_type_0 req 48-48;
 SG_MUL_VAL_ 129 servo_position_max_0 req 48-48;
 SG_MUL_VAL_ 129 servo_velocity_max_0 req 48-48;
