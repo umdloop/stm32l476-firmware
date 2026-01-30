@@ -1,5 +1,5 @@
 App/systems/heartbeat_system.o: ../App/systems/heartbeat_system.c \
- ../App/Inc/ex_system.h ../App/Inc/app_config.h ../Core/Inc/main.h \
+ ../App/Inc/heartbeat_system.h ../App/Inc/app_config.h ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
@@ -29,7 +29,7 @@ App/systems/heartbeat_system.o: ../App/systems/heartbeat_system.c \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
  ../App/Inc/can_params.h ../App/Inc/can_system.h
-../App/Inc/ex_system.h:
+../App/Inc/heartbeat_system.h:
 ../App/Inc/app_config.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:

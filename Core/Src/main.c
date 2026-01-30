@@ -12,6 +12,7 @@
 #include "../../App/Inc/pcb_led_system.h"
 // #include "../../App/Inc/ex_system.h"
 #include "../../App/Inc/heartbeat_system.h"
+#include "../../App/Inc/servo_system.h"
 
 int main(void)
 {
@@ -29,6 +30,7 @@ int main(void)
 
   // RR_AddController(ex_system_controller);
   RR_AddController(heartbeat_system_controller);
+  RR_AddController(servo_system_controller);
 
   while (1)
   {

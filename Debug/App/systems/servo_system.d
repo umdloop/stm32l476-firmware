@@ -1,4 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+App/systems/servo_system.o: ../App/systems/servo_system.c \
+ ../App/Inc/servo_system.h ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
@@ -27,15 +28,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
- ../Core/Src/../../Platform/Inc/system_clock.h \
- ../Core/Src/../../Platform/Inc/gpio.h \
- ../Core/Src/../../Platform/Inc/can.h \
- ../Core/Src/../../Platform/Inc/usart.h \
- ../Core/Src/../../App/Inc/rr_scheduler.h \
- ../Core/Src/../../App/Inc/can_system.h \
- ../Core/Src/../../App/Inc/pcb_led_system.h \
- ../Core/Src/../../App/Inc/heartbeat_system.h \
- ../Core/Src/../../App/Inc/servo_system.h
+ ../App/Inc/can_params.h ../App/Inc/can_system.h
+../App/Inc/servo_system.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -65,12 +59,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h:
-../Core/Src/../../Platform/Inc/system_clock.h:
-../Core/Src/../../Platform/Inc/gpio.h:
-../Core/Src/../../Platform/Inc/can.h:
-../Core/Src/../../Platform/Inc/usart.h:
-../Core/Src/../../App/Inc/rr_scheduler.h:
-../Core/Src/../../App/Inc/can_system.h:
-../Core/Src/../../App/Inc/pcb_led_system.h:
-../Core/Src/../../App/Inc/heartbeat_system.h:
-../Core/Src/../../App/Inc/servo_system.h:
+../App/Inc/can_params.h:
+../App/Inc/can_system.h:
