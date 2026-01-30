@@ -6,6 +6,7 @@
 "./App/systems/ex_system.o"
 "./App/systems/heartbeat_system.o"
 "./App/systems/pcb_led_system.o"
+"./App/systems/servo_system.o"
 "./Core/Src/error_handler.o"
 "./Core/Src/main.o"
 "./Core/Startup/startup_stm32l476rgtx.o"
