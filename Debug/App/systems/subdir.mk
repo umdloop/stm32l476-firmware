@@ -6,21 +6,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../App/systems/can_system.c \
-../App/systems/ex_system.c \
 ../App/systems/heartbeat_system.c \
 ../App/systems/pcb_led_system.c \
 ../App/systems/stepper_system.c 
 
 OBJS += \
 ./App/systems/can_system.o \
-./App/systems/ex_system.o \
 ./App/systems/heartbeat_system.o \
 ./App/systems/pcb_led_system.o \
 ./App/systems/stepper_system.o 
 
 C_DEPS += \
 ./App/systems/can_system.d \
-./App/systems/ex_system.d \
 ./App/systems/heartbeat_system.d \
 ./App/systems/pcb_led_system.d \
 ./App/systems/stepper_system.d 
@@ -33,7 +30,7 @@ App/systems/%.o App/systems/%.su App/systems/%.cyclo: ../App/systems/%.c App/sys
 clean: clean-App-2f-systems
 
 clean-App-2f-systems:
-	-$(RM) ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/ex_system.cyclo ./App/systems/ex_system.d ./App/systems/ex_system.o ./App/systems/ex_system.su ./App/systems/heartbeat_system.cyclo ./App/systems/heartbeat_system.d ./App/systems/heartbeat_system.o ./App/systems/heartbeat_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su ./App/systems/stepper_system.cyclo ./App/systems/stepper_system.d ./App/systems/stepper_system.o ./App/systems/stepper_system.su
+	-$(RM) ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/heartbeat_system.cyclo ./App/systems/heartbeat_system.d ./App/systems/heartbeat_system.o ./App/systems/heartbeat_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su ./App/systems/stepper_system.cyclo ./App/systems/stepper_system.d ./App/systems/stepper_system.o ./App/systems/stepper_system.su
 
 .PHONY: clean-App-2f-systems
 

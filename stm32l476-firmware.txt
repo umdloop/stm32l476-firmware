@@ -1,0 +1,66 @@
+Configuration	stm32l476-firmware
+STM32CubeMX 	6.16.1
+Date	02/01/2026
+MCU	STM32L476RGTx
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+CAN1	Activated	CAN1_RX	PA11
+CAN1	Activated	CAN1_TX	PA12
+RCC	BYPASS Clock Source	RCC_OSC_IN	PH0-OSC_IN (PH0)
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+UART4	Asynchronous	UART4_RX	PA1
+UART4	Asynchronous	UART4_TX	PA0
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+5	PH0-OSC_IN (PH0)	RCC_OSC_IN	
+14	PA0	UART4_TX	
+15	PA1	UART4_RX	
+44	PA11	CAN1_RX	
+45	PA12	CAN1_TX	
+PERIPHERALS	MODES	FUNCTIONS	PINS
+CAN1	Activated	CAN1_RX	PA11
+CAN1	Activated	CAN1_TX	PA12
+RCC	BYPASS Clock Source	RCC_OSC_IN	PH0-OSC_IN (PH0)
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+UART4	Asynchronous	UART4_RX	PA1
+UART4	Asynchronous	UART4_TX	PA0
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+5	PH0-OSC_IN (PH0)	RCC_OSC_IN	
+14	PA0	UART4_TX	
+15	PA1	UART4_RX	
+44	PA11	CAN1_RX	
+45	PA12	CAN1_TX	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : stm32l476-firmware
+Project Folder : C:\Users\neilc\Documents\Loop_Projects\stm32l476-firmware
+Toolchain / IDE : STM32CubeIDE
+Firmware Package Name and Version : STM32Cube FW_L4 V1.18.2
+
+
+Code Generation Settings : 
+STM32Cube MCU packages and embedded software packs : Add necessary library files as reference in the toolchain project configuration file
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : No
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : 
+
+
+
+
+

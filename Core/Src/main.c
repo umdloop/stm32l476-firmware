@@ -13,7 +13,6 @@
 // #include "../../App/Inc/ex_system.h"
 #include "../../App/Inc/heartbeat_system.h"
 #include "../../App/Inc/stepper_system.h"
-
 int main(void)
 {
   HAL_Init();
