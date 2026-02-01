@@ -1,0 +1,2 @@
+../App/systems/stepper_system.c:13:13:init_once	4	static
+../App/systems/stepper_system.c:21:6:stepper_system_controller	24	static

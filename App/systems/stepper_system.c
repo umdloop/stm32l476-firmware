@@ -3,6 +3,7 @@
 #include "can_params.h"
 #include "can_system.h"
 #include "main.h"
+#include <stdlib.h>
 
 #define MARGIN_OF_ERROR 5
 #define MOTOR_POSITION_REQUEST_PARAMETER "STEPPER_PCB_C.position_request"
@@ -32,11 +33,11 @@ void stepper_system_controller(void)
   int32_t actual_Position = 0;
   bool position_Requested = false;
 
-  if (!CanParams_GetBool(MOTOR_POSITION_REQUEST_PARAMTER, &position_Requested)) {
+  if (!CanParams_GetBool(MOTOR_POSITION_REQUEST_PARAMETER, &position_Requested)) {
 	  // Prolly don't want to return here.
   } else {
 	  if(position_Requested) {
-		  CanSystem_SetInt32("STEPPER_PCB_R.stepper_position", &position_Requested);
+		  CanSystem_SetBool("STEPPER_PCB_R.stepper_position", &position_Requested);
 	  }
   }
 
