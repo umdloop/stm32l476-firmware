@@ -14,6 +14,8 @@
 #include "../../App/Inc/heartbeat_system.h"
 #include "../../App/Inc/stepper_system.h"
 
+#define STEPPER_MODEL_NEMA17 1
+
 int main(void)
 {
   HAL_Init();
