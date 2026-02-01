@@ -6051,7 +6051,7 @@ void stepper_system_controller(void)
  8002ea0:	7afb      	ldrb	r3, [r7, #11]
  8002ea2:	2b00      	cmp	r3, #0
  8002ea4:	d003      	beq.n	8002eae <stepper_system_controller+0x46>
-		  CanSystem_SetBool("STEPPER_PCB_R.stepper_position", &position_Requested);
+		  CanSystem_SetBool("STEPPER_PCB_R.stepper_position", true);
  8002ea6:	2101      	movs	r1, #1
  8002ea8:	480f      	ldr	r0, [pc, #60]	@ (8002ee8 <stepper_system_controller+0x80>)
  8002eaa:	f7ff fe9f 	bl	8002bec <CanSystem_SetBool>

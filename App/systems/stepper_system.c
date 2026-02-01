@@ -37,7 +37,7 @@ void stepper_system_controller(void)
 	  // Prolly don't want to return here.
   } else {
 	  if(position_Requested) {
-		  CanSystem_SetBool("STEPPER_PCB_R.stepper_position", &position_Requested);
+		  CanSystem_SetBool("STEPPER_PCB_R.stepper_position", true);
 	  }
   }
 
