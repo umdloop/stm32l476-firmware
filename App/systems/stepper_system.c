@@ -48,8 +48,8 @@ static const StepperDef_t s_stepper_defs[] =
     .name = "NEMA17",
     .modes = { .speed_control = true, .position_control = true },
     .steps_per_rev = 200,
-    .max_speed_steps_s = 1000,
-    .max_accel_steps_s2 = 500,
+    .max_speed_steps_s = 10000,  // Increased max to 10 kHz
+    .max_accel_steps_s2 = 5000,
     .microstep_mode = 16,
   }
 };
@@ -66,6 +66,7 @@ typedef struct
 {
   TIM_TypeDef*  tim;
   uint8_t       channel;  // 1, 2, 3, or 4
+  uint8_t       timer_group; // Motors sharing the same timer
 
   GPIO_TypeDef* dir_port;
   uint16_t      dir_pin;
@@ -87,25 +88,26 @@ typedef struct
 
 } StepperPortHw_t;
 
+// Timer groups: 0=TIM2, 1=TIM3, 2=TIM4
 static StepperPortHw_t s_hw[STEPPER_PORT_COUNT] =
 {
   // Motor 0: step=PB3/TIM2_CH2, dir=PD2, enbl=PB4, ms1=PC12, ms2=PC11, i1=PC10, i2=N/A
-  { TIM2, 2, GPIOD, GPIO_PIN_2, GPIOB, GPIO_PIN_4, GPIOC, GPIO_PIN_12, GPIOC, GPIO_PIN_11, GPIOC, GPIO_PIN_10, NULL, 0 },
+  { TIM2, 2, 0, GPIOD, GPIO_PIN_2, GPIOB, GPIO_PIN_4, GPIOC, GPIO_PIN_12, GPIOC, GPIO_PIN_11, GPIOC, GPIO_PIN_10, NULL, 0 },
 
   // Motor 1: step=PB5/TIM3_CH2, dir=PB6, enbl=PC13, ms1=PC15, ms2=PH1, i1=PB9, i2=PB7
-  { TIM3, 2, GPIOB, GPIO_PIN_6, GPIOC, GPIO_PIN_13, GPIOC, GPIO_PIN_15, GPIOH, GPIO_PIN_1, GPIOB, GPIO_PIN_9, GPIOB, GPIO_PIN_7 },
+  { TIM3, 2, 1, GPIOB, GPIO_PIN_6, GPIOC, GPIO_PIN_13, GPIOC, GPIO_PIN_15, GPIOH, GPIO_PIN_1, GPIOB, GPIO_PIN_9, GPIOB, GPIO_PIN_7 },
 
   // Motor 2: step=PB8/TIM4_CH3, dir=PC14, enbl=PA3, ms1=PC2, ms2=PC3, i1=PC0, i2=PC1
-  { TIM4, 3, GPIOC, GPIO_PIN_14, GPIOA, GPIO_PIN_3, GPIOC, GPIO_PIN_2, GPIOC, GPIO_PIN_3, GPIOC, GPIO_PIN_0, GPIOC, GPIO_PIN_1 },
+  { TIM4, 3, 2, GPIOC, GPIO_PIN_14, GPIOA, GPIO_PIN_3, GPIOC, GPIO_PIN_2, GPIOC, GPIO_PIN_3, GPIOC, GPIO_PIN_0, GPIOC, GPIO_PIN_1 },
 
   // Motor 3: step=PA5/TIM2_CH1, dir=PA2, enbl=PC4, ms1=PA6, ms2=PC5, i1=PA7, i2=PA4
-  { TIM2, 1, GPIOA, GPIO_PIN_2, GPIOC, GPIO_PIN_4, GPIOA, GPIO_PIN_6, GPIOC, GPIO_PIN_5, GPIOA, GPIO_PIN_7, GPIOA, GPIO_PIN_4 },
+  { TIM2, 1, 0, GPIOA, GPIO_PIN_2, GPIOC, GPIO_PIN_4, GPIOA, GPIO_PIN_6, GPIOC, GPIO_PIN_5, GPIOA, GPIO_PIN_7, GPIOA, GPIO_PIN_4 },
 
   // Motor 4: step=PB0/TIM3_CH3, dir=PC7, enbl=PC8, ms1=PA8, ms2=PC9, i1=PA10, i2=PA9
-  { TIM3, 3, GPIOC, GPIO_PIN_7, GPIOC, GPIO_PIN_8, GPIOA, GPIO_PIN_8, GPIOC, GPIO_PIN_9, GPIOA, GPIO_PIN_10, GPIOA, GPIO_PIN_9 },
+  { TIM3, 3, 1, GPIOC, GPIO_PIN_7, GPIOC, GPIO_PIN_8, GPIOA, GPIO_PIN_8, GPIOC, GPIO_PIN_9, GPIOA, GPIO_PIN_10, GPIOA, GPIO_PIN_9 },
 
   // Motor 5: step=PB10/TIM2_CH3, dir=PB2, enbl=PB14, ms1=PC6, ms2=PB12, i1=PB15, i2=PB11
-  { TIM2, 3, GPIOB, GPIO_PIN_2, GPIOB, GPIO_PIN_14, GPIOC, GPIO_PIN_6, GPIOB, GPIO_PIN_12, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_11 },
+  { TIM2, 3, 0, GPIOB, GPIO_PIN_2, GPIOB, GPIO_PIN_14, GPIOC, GPIO_PIN_6, GPIOB, GPIO_PIN_12, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_11 },
 };
 
 /* =========================
@@ -124,6 +126,10 @@ typedef struct
 
 static StepperPortState_t s_ports[STEPPER_PORT_COUNT];
 static uint8_t s_inited = 0U;
+
+// Track current frequency for each timer group
+#define TIMER_GROUP_COUNT 3
+static uint32_t s_timer_group_freq[TIMER_GROUP_COUNT] = {0, 0, 0};
 
 /* =========================
  *  CAN integration
@@ -239,23 +245,61 @@ static void tim_set_ccr(TIM_TypeDef* tim, uint8_t ch, uint32_t value)
 
 static void set_step_frequency(uint8_t port, uint32_t freq_hz)
 {
-  // Assuming timers are configured for PWM with appropriate prescaler
-  // ARR and CCR need to be set based on desired frequency
-  // For now, we'll set duty cycle to 50% when moving, 0% when stopped
+  // Timer configuration from IOC:
+  // - Timer clock: 8 MHz
+  // - Prescaler: 7 → Effective clock = 8MHz / (7+1) = 1 MHz
+  // - Default ARR: 999
+
+  const uint32_t timer_clock = 1000000; // 1 MHz after prescaler
+  uint8_t timer_group = s_hw[port].timer_group;
   
   if (freq_hz == 0)
   {
+    // Stop this channel
     tim_set_ccr(s_hw[port].tim, s_hw[port].channel, 0);
     s_ports[port].is_moving = false;
+
+    // Check if any other motors in this timer group are still moving
+    bool any_moving = false;
+    for (uint8_t i = 0; i < STEPPER_PORT_COUNT; i++)
+    {
+      if (s_hw[i].timer_group == timer_group && i != port && s_ports[i].is_moving)
+      {
+        any_moving = true;
+        break;
+      }
+    }
+
+    // If no motors in this group are moving, we could stop the timer
+    // but it's safer to just leave it running with 0 duty cycle
+
+    return;
   }
-  else
+
+  // Clamp frequency to safe range
+  if (freq_hz < 10) freq_hz = 10;       // Minimum 10 Hz
+  if (freq_hz > 10000) freq_hz = 10000; // Maximum 10 kHz
+
+  // Calculate new ARR for this frequency
+  uint32_t arr = (timer_clock / freq_hz) - 1;
+
+  // Update the timer period (affects all channels on this timer!)
+  s_hw[port].tim->ARR = arr;
+  s_timer_group_freq[timer_group] = freq_hz;
+
+  // Set 50% duty cycle for this channel
+  tim_set_ccr(s_hw[port].tim, s_hw[port].channel, arr / 2);
+
+  // Update duty cycles for other active channels on this timer
+  for (uint8_t i = 0; i < STEPPER_PORT_COUNT; i++)
   {
-    // Assuming timer is already configured with proper ARR for frequency range
-    // Set 50% duty cycle for stepping
-    uint32_t arr = s_hw[port].tim->ARR;
-    tim_set_ccr(s_hw[port].tim, s_hw[port].channel, arr / 2);
-    s_ports[port].is_moving = true;
+    if (s_hw[i].timer_group == timer_group && i != port && s_ports[i].is_moving)
+    {
+      tim_set_ccr(s_hw[i].tim, s_hw[i].channel, arr / 2);
+    }
   }
+
+  s_ports[port].is_moving = true;
 }
 
 /* =========================
@@ -280,6 +324,12 @@ static void init_internal_once(void)
   {
     s_last_general[i] = -999999;
     s_last_speed_cmd[i] = -999999;
+  }
+
+  // Initialize timer group frequencies
+  for (uint8_t i = 0; i < TIMER_GROUP_COUNT; i++)
+  {
+    s_timer_group_freq[i] = 0;
   }
 
   // GPIO clocks should already be enabled by HAL/CubeMX
@@ -308,8 +358,16 @@ static void init_internal_once(void)
     tim_set_ccr(s_hw[i].tim, s_hw[i].channel, 0);
   }
 
-  // PWM timers should already be started by HAL/CubeMX init
-  // If not, you would start them here similar to servo code
+  // Start PWM timers - they should be configured by CubeMX
+  // Start each timer only once per timer group
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1); // Motor 3
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2); // Motor 0
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3); // Motor 5
+
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); // Motor 1
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3); // Motor 4
+
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3); // Motor 2
 
   // Default first 6 ports to NEMA17 model (disabled)
   for (uint8_t p = 0; p < STEPPER_PORT_COUNT; p++)
