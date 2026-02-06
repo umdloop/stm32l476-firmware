@@ -1009,3 +1009,23 @@ bool CanSystem_SetFloat(const char* full_name, float value)
     return true;
 }
 
+/* In App/systems/can_system.c */
+
+
+void CanSystem_Transmit(uint32_t id, uint8_t* data, uint8_t len) {
+    // For now, this is a stub so the project links.
+    // You will eventually put your HAL CAN Tx logic here.
+    (void)id; (void)data; (void)len;
+}
+
+/**
+ * @brief Polls the CAN RX buffer.
+ * Returns true if a frame was successfully retrieved.
+ */
+bool CanSystem_Receive(CanFrame_t* frame) {
+    // For now, return false so the code doesn't hang in a while loop.
+    // You will eventually put your HAL CAN Rx logic here.
+    (void)frame;
+    return false;
+}
+
