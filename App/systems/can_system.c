@@ -13,7 +13,7 @@
 
 /* DBC text blob (generated from App/dbc/can_dbc_text.c) */
 extern const char* g_can_dbc_text;
-
+extern CAN_HandleTypeDef hcan1;
 /* =========================
  *  DBC parsing
  * ========================= */
@@ -1009,23 +1009,30 @@ bool CanSystem_SetFloat(const char* full_name, float value)
     return true;
 }
 
-/* In App/systems/can_system.c */
-
-
 void CanSystem_Transmit(uint32_t id, uint8_t* data, uint8_t len) {
-    // For now, this is a stub so the project links.
-    // You will eventually put your HAL CAN Tx logic here.
-    (void)id; (void)data; (void)len;
+    CAN_TxHeaderTypeDef header;
+    uint32_t mailbox;
+
+    header.StdId = id;
+    header.ExtId = 0;
+    header.IDE = CAN_ID_STD;
+    header.RTR = CAN_RTR_DATA;
+    header.DLC = len;
+    header.TransmitGlobalTime = DISABLE;
+
+    HAL_CAN_AddTxMessage(&hcan1, &header, data, &mailbox);
 }
 
-/**
- * @brief Polls the CAN RX buffer.
- * Returns true if a frame was successfully retrieved.
- */
 bool CanSystem_Receive(CanFrame_t* frame) {
-    // For now, return false so the code doesn't hang in a while loop.
-    // You will eventually put your HAL CAN Rx logic here.
-    (void)frame;
+    CAN_RxHeaderTypeDef header;
+
+    // Check if there is a message in FIFO 0
+    if (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) > 0) {
+        if (HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &header, frame->data) == HAL_OK) {
+            frame->can_id = header.StdId;
+            frame->len = header.DLC;
+            return true;
+        }
+    }
     return false;
 }
-

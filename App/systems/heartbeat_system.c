@@ -6,7 +6,7 @@
 
 static uint8_t  s_inited = 0U;
 static uint32_t heartbeat_timer = 0U;
-static uint8_t  s_hb_delay_sec = 1U; // Default to 1s as per protocol range [cite: 257]
+static uint8_t  s_hb_delay_sec = 1U; // Default to 1s as per protocol range
 
 static bool delay_elapsed(uint32_t *timestamp, uint32_t delay_ms)
 {
@@ -27,7 +27,7 @@ void heartbeat_system_controller(void)
         heartbeat_timer = HAL_GetTick();
     }
 
-    // 1. Check for rate updates from the CAN bus (Command 0x10) [cite: 255]
+    // 1. Check for rate updates from the CAN bus (Command 0x10)
     // Note: In your architecture, the CAN system likely updates these params automatically
     int32_t requested_delay = 0;
     if (CanParams_GetInt32("SERVO_PCB_C.pcb_heartbeat_delay", &requested_delay))
@@ -38,7 +38,7 @@ void heartbeat_system_controller(void)
         }
     }
 
-    // 2. Handle the periodic heartbeat transmission [cite: 256, 258]
+    // 2. Handle the periodic heartbeat transmission
     if (s_hb_delay_sec > 0)
     {
         uint32_t hb_ms = (uint32_t)s_hb_delay_sec * 1000U;
@@ -49,7 +49,7 @@ void heartbeat_system_controller(void)
             hb_data[0] = 0x10; // Heartbeat Command Byte
             hb_data[1] = 0x01; // heartbeat_success = 1
 
-            // Send periodic confirmation on Response ID 0x91 [cite: 263]
+            // Send periodic confirmation on Response ID 0x91
             CanSystem_Transmit(0x91, hb_data, 2);
 
             // Toggle LED to show heartbeat is active

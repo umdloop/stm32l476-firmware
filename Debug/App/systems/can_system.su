@@ -24,5 +24,5 @@
 ../App/systems/can_system.c:958:6:CanSystem_SetBool	16	static
 ../App/systems/can_system.c:977:6:CanSystem_SetInt32	16	static
 ../App/systems/can_system.c:993:6:CanSystem_SetFloat	16	static
-../App/systems/can_system.c:1015:6:CanSystem_Transmit	24	static
-../App/systems/can_system.c:1025:6:CanSystem_Receive	16	static
+../App/systems/can_system.c:1012:6:CanSystem_Transmit	56	static
+../App/systems/can_system.c:1026:6:CanSystem_Receive	48	static
