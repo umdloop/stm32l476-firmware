@@ -32,11 +32,11 @@ void heartbeat_system_controller(void)
         init_once();
     }
 
-    if (!CanParams_IsValid("SERVO_PCB_C.status_heartbeat_delay"))
+    if (!CanParams_IsValid("SERVO_PCB_C.pcb_heartbeat_delay"))
         return;
 
     int32_t hb_s = 0;
-    if (!CanParams_GetInt32("SERVO_PCB_C.status_heartbeat_delay", &hb_s) || hb_s <= 0)
+    if (!CanParams_GetInt32("SERVO_PCB_C.pcb_heartbeat_delay", &hb_s) || hb_s <= 0)
         return;
 
     uint32_t hb_ms = (uint32_t)hb_s * 1000U;

@@ -27,6 +27,7 @@ typedef struct
   const char* name;
 
   ServoModes_t modes;
+  uint8_t      type;
 
   uint16_t pwm_min_us;
   uint16_t pwm_max_us;
@@ -50,6 +51,8 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "NONE",
     .modes = { .position = false, .velocity = false },
+    .type = SERVO_TYPE_UNDEFINED,
+
     .pwm_min_us = 0, .pwm_max_us = 0,
     .max_rotation_deg = 0.0f, .max_diff_position_deg = 0.0f,
     .travel_deg_per_us = 0.0f,
@@ -60,6 +63,7 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "Hitec HS-645MG",
     .modes = { .position = true, .velocity = false },
+    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 553,
     .pwm_max_us = 2520,
@@ -73,6 +77,26 @@ static const ServoDef_t s_servo_defs[] =
     .vel_deg_s_per_us = 0.0f,
 
     .max_speed_deg_s = 250.0f,
+
+    .feedback = { .has_feedback = false },
+  },
+  {
+    .name = "DFRobot SER0067",
+    .modes = { .position = true, .velocity = false },
+    .type = SERVO_TYPE_STANDARD,
+
+    .pwm_min_us = 500,
+    .pwm_max_us = 2500,
+
+    .max_rotation_deg = 360.0f,
+    .max_diff_position_deg = 360.0f,
+
+    .travel_deg_per_us = 0.180f,
+
+    .vel_neutral_us = 1500,
+    .vel_deg_s_per_us = 0.0f,
+
+    .max_speed_deg_s = 252.0f,
 
     .feedback = { .has_feedback = false },
   }
@@ -137,16 +161,6 @@ static uint8_t s_inited = 0U;
 
 #define SERVO_CAN_COUNT (6u)
 
-static const char* s_can_general[SERVO_CAN_COUNT] =
-{
-  "SERVO_PCB_C.general_0",
-  "SERVO_PCB_C.general_1",
-  "SERVO_PCB_C.general_2",
-  "SERVO_PCB_C.general_3",
-  "SERVO_PCB_C.general_4",
-  "SERVO_PCB_C.general_5",
-};
-
 static const char* s_can_pos_tgt[SERVO_CAN_COUNT] =
 {
   "SERVO_PCB_C.motor_position_target_0",
@@ -165,6 +179,46 @@ static const char* s_can_vel_tgt[SERVO_CAN_COUNT] =
   "SERVO_PCB_C.motor_velocity_target_3",
   "SERVO_PCB_C.motor_velocity_target_4",
   "SERVO_PCB_C.motor_velocity_target_5",
+};
+
+static const char* s_can_mot_state_req[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_C.motor_state_req_event_0",
+  "SERVO_PCB_C.motor_state_req_event_1",
+  "SERVO_PCB_C.motor_state_req_event_2",
+  "SERVO_PCB_C.motor_state_req_event_3",
+  "SERVO_PCB_C.motor_state_req_event_4",
+  "SERVO_PCB_C.motor_state_req_event_5",
+};
+
+static const char* s_can_mot_status_req[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_C.motor_status_req_event_0",
+  "SERVO_PCB_C.motor_status_req_event_1",
+  "SERVO_PCB_C.motor_status_req_event_2",
+  "SERVO_PCB_C.motor_status_req_event_3",
+  "SERVO_PCB_C.motor_status_req_event_4",
+  "SERVO_PCB_C.motor_status_req_event_5",
+};
+
+static const char* s_can_maint_cmd[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_C.maintenance_cmd_0",
+  "SERVO_PCB_C.maintenance_cmd_1",
+  "SERVO_PCB_C.maintenance_cmd_2",
+  "SERVO_PCB_C.maintenance_cmd_3",
+  "SERVO_PCB_C.maintenance_cmd_4",
+  "SERVO_PCB_C.maintenance_cmd_5",
+};
+
+static const char* s_can_spec_req[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_C.servo_spec_req_0",
+  "SERVO_PCB_C.servo_spec_req_1",
+  "SERVO_PCB_C.servo_spec_req_2",
+  "SERVO_PCB_C.servo_spec_req_3",
+  "SERVO_PCB_C.servo_spec_req_4",
+  "SERVO_PCB_C.servo_spec_req_5",
 };
 
 static const char* s_can_pos_out[SERVO_CAN_COUNT] =
@@ -187,8 +241,58 @@ static const char* s_can_vel_out[SERVO_CAN_COUNT] =
   "SERVO_PCB_R.motor_velocity_5",
 };
 
+static const char* s_can_motor_status[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_R.motor_status_0",
+  "SERVO_PCB_R.motor_status_1",
+  "SERVO_PCB_R.motor_status_2",
+  "SERVO_PCB_R.motor_status_3",
+  "SERVO_PCB_R.motor_status_4",
+  "SERVO_PCB_R.motor_status_5",
+};
+
+static const char* s_can_maint_succ[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_R.maintenance_success_0",
+  "SERVO_PCB_R.maintenance_success_1",
+  "SERVO_PCB_R.maintenance_success_2",
+  "SERVO_PCB_R.maintenance_success_3",
+  "SERVO_PCB_R.maintenance_success_4",
+  "SERVO_PCB_R.maintenance_success_5",
+};
+
+static const char* s_can_servo_type[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_R.servo_type_0",
+  "SERVO_PCB_R.servo_type_1",
+  "SERVO_PCB_R.servo_type_2",
+  "SERVO_PCB_R.servo_type_3",
+  "SERVO_PCB_R.servo_type_4",
+  "SERVO_PCB_R.servo_type_5",
+};
+
+static const char* s_can_pos_max[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_R.servo_position_max_0",
+  "SERVO_PCB_R.servo_position_max_1",
+  "SERVO_PCB_R.servo_position_max_2",
+  "SERVO_PCB_R.servo_position_max_3",
+  "SERVO_PCB_R.servo_position_max_4",
+  "SERVO_PCB_R.servo_position_max_5",
+};
+
+static const char* s_can_vel_max[SERVO_CAN_COUNT] =
+{
+  "SERVO_PCB_R.servo_velocity_max_0",
+  "SERVO_PCB_R.servo_velocity_max_1",
+  "SERVO_PCB_R.servo_velocity_max_2",
+  "SERVO_PCB_R.servo_velocity_max_3",
+  "SERVO_PCB_R.servo_velocity_max_4",
+  "SERVO_PCB_R.servo_velocity_max_5",
+};
+
 static uint8_t s_rx_inited = 0U;
-static int32_t s_last_general[SERVO_CAN_COUNT];
+static int32_t s_last_maint_cmd[SERVO_CAN_COUNT];
 static int32_t s_last_pos_tgt[SERVO_CAN_COUNT];
 static int32_t s_last_vel_tgt[SERVO_CAN_COUNT];
 
@@ -364,7 +468,7 @@ static void init_internal_once(void)
   s_rx_inited = 0U;
   for (uint8_t i = 0; i < SERVO_CAN_COUNT; i++)
   {
-    s_last_general[i] = -999999;
+    s_last_maint_cmd[i] = -999999;
     s_last_pos_tgt[i] = -999999;
     s_last_vel_tgt[i] = -999999;
   }
@@ -528,6 +632,30 @@ uint8_t ServoSystem_GetServoModel(uint8_t port)
   return s_ports[port].model_id;
 }
 
+uint8_t ServoSystem_GetServoType(uint8_t port)
+{
+  if (!is_port_valid(port)) return 0;
+  const ServoDef_t* def = get_def(s_ports[port].model_id);
+  if (def == NULL) return 0;
+  return (uint8_t)(def->type);
+}
+
+uint16_t ServoSystem_GetPosMax(uint8_t port)
+{
+  if (!is_port_valid(port)) return 0;
+  const ServoDef_t* def = get_def(s_ports[port].model_id);
+  if (def == NULL) return 0;
+  return (uint16_t)(def->max_rotation_deg);
+}
+
+uint16_t ServoSystem_GetVelMax(uint8_t port)
+{
+  if (!is_port_valid(port)) return 0;
+  const ServoDef_t* def = get_def(s_ports[port].model_id);
+  if (def == NULL) return 0;
+  return (uint16_t)(def->max_speed_deg_s);
+}
+
 bool ServoSystem_SetPositionDeg(uint8_t port, float position_deg)
 {
   if (!s_inited)
@@ -570,12 +698,40 @@ void ServoSystem_Controller(void)
 
   for (uint8_t i = 0; i < SERVO_CAN_COUNT; i++)
   {
-    int32_t gen = 0;
-    if (CanParams_GetInt32(s_can_general[i], &gen))
+    /*
+    int32_t status_req = 0;
+    if (CanParams_GetInt32(s_can_motor_status_req[i], &status_req))
     {
-      if (!s_rx_inited || (gen != s_last_general[i]))
+      if (!s_rx_inited || (status_req != s_can_motor_status_req[i]))
       {
-        s_last_general[i] = gen;
+        s_can_motor_status_req[i] = status_req;
+
+        switch ((uint8_t)status_req)
+        {
+          case 0: ; break;
+          case 1: ; break;
+          case 2: ; break;
+          case 3: ; break;
+          case 4: ; break;
+          case 5: ; break;
+          case 6: ; break;
+          case 7: ; break;
+          case 8: ; break;
+          case 9: ; break;
+          case 10: ; break;
+          case 11: ; break;
+          default: break;
+        }
+      }
+    }
+    */
+
+    int32_t gen = 0;
+    if (CanParams_GetInt32(s_can_maint_cmd[i], &gen))
+    {
+      if (!s_rx_inited || (gen != s_can_maint_cmd[i]))
+      {
+        s_can_maint_cmd[i] = gen;
 
         switch ((uint8_t)gen)
         {
@@ -585,6 +741,25 @@ void ServoSystem_Controller(void)
           case 3: ServoSystem_OnShutdownMotor(i); set_vcc(i, false); break;
           case 4: ServoSystem_OnClearErrors(i); break;
           default: break;
+        }
+      }
+    }
+
+    int32_t spec_req = 0;
+    if (CanParams_GetBool(s_can_spec_req[i], &spec_req))
+    {
+      if (!s_rx_inited || (spec_req != s_can_spec_req[i]))
+      {
+        s_can_spec_req[i] = spec_req;
+        if ((uint8_t)spec_req)
+        {
+          s_can_servo_type[i] = ServoSystem_GetServoType(i);
+          s_can_pos_max[i] = ServoSystem_GetPosMax(i);
+          s_can_vel_max[i] = ServoSystem_GetVelMax(i);
+        }
+        else
+        {
+          break;
         }
       }
     }

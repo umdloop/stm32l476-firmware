@@ -17,6 +17,14 @@ enum
   SERVO_MODEL_HS_645MG = 1,
 };
 
+/* Model Type */
+enum
+{
+  SERVO_TYPE_UNDEFINED = 0,
+  SERVO_TYPE_STANDARD = 1,
+  SERVO_TYPE_CONTINUOUS = 2,
+};
+
 /* Round-robin entrypoint */
 void servo_system_controller(void);
 
@@ -24,7 +32,10 @@ void servo_system_controller(void);
 void ServoSystem_Controller(void);
 
 bool ServoSystem_SetServoModel(uint8_t port, uint8_t model_id);
+uint8_t ServoSystem_GetServoType(uint8_t port);
 uint8_t ServoSystem_GetServoModel(uint8_t port);
+uint16_t ServoSystem_GetPosMax(uint8_t port);
+uint16_t ServoSystem_GetVelMax(uint8_t port);
 
 bool ServoSystem_SetPositionDeg(uint8_t port, float position_deg);
 bool ServoSystem_SetVelocityDegS(uint8_t port, float velocity_deg_s);
