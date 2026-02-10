@@ -53,7 +53,7 @@ void heartbeat_system_controller(void)
             CanSystem_Transmit(0x91, hb_data, 2);
 
             // Toggle LED to show heartbeat is active
-            //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
         }
     }
 }

@@ -7,5 +7,7 @@
 
 /* Public API for the Scheduler */
 void stepper_system_controller(void);
+// Add this to stepper_system.h
+void stepper_system_test_spin_all(float speed);
 
 #endif

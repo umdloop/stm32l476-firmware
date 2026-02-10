@@ -1,3 +1,6 @@
-../App/systems/stepper_system.c:47:13:set_motor_speed	24	static
-../App/systems/stepper_system.c:67:13:publish_state	32	static
-../App/systems/stepper_system.c:86:6:stepper_system_controller	40	static
+../App/systems/stepper_system.c:103:13:set_motor_speed	24	static
+../App/systems/stepper_system.c:123:13:publish_state	32	static
+../App/systems/stepper_system.c:137:13:stepper_gpio_init	32	static
+../App/systems/stepper_system.c:158:13:stepper_timer_init	16	static
+../App/systems/stepper_system.c:165:6:stepper_system_init	8	static
+../App/systems/stepper_system.c:173:6:stepper_system_controller	32	static
