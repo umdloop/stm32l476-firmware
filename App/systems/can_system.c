@@ -1009,3 +1009,18 @@ bool CanSystem_SetFloat(const char* full_name, float value)
     return true;
 }
 
+void CanSystem_Transmit(uint32_t arbitration_id, uint8_t* payload, uint8_t len) {
+    CAN_TxHeaderTypeDef tx_header;
+    uint32_t tx_mailbox;
+
+    tx_header.StdId = arbitration_id;
+    tx_header.ExtId = 0;
+    tx_header.IDE = CAN_ID_STD;
+    tx_header.RTR = CAN_RTR_DATA;
+    tx_header.DLC = len;
+    tx_header.TransmitGlobalTime = DISABLE;
+
+    // Request HAL to send the message
+    if (HAL_CAN_AddTxMessage(&hcan1, &tx_header, payload, &tx_mailbox) != HAL_OK) {
+    }
+}

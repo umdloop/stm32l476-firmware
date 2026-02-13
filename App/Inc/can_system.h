@@ -11,6 +11,7 @@ extern "C" {
 /* Round-robin scheduled controller */
 void can_system_controller(void);
 
+void CanSystem_Transmit(uint32_t arbitration_id, uint8_t* payload, uint8_t len);
 /*
  * External TX-facing API
  *

@@ -24,3 +24,4 @@
 ../App/systems/can_system.c:958:6:CanSystem_SetBool	5
 ../App/systems/can_system.c:977:6:CanSystem_SetInt32	5
 ../App/systems/can_system.c:993:6:CanSystem_SetFloat	5
+../App/systems/can_system.c:1012:6:CanSystem_Transmit	1
