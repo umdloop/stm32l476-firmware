@@ -30,7 +30,11 @@ App/systems/stepper_system.o: ../App/systems/stepper_system.c \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
+<<<<<<< HEAD
  ../App/Inc/can_params.h ../App/Inc/can_system.h
+=======
+ ../App/Inc/can_system.h
+>>>>>>> 861de1f932ad4e7e6955641d40c3b4d457ce9318
 ../App/Inc/stepper_system.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
@@ -63,5 +67,4 @@ App/systems/stepper_system.o: ../App/systems/stepper_system.c \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h:
-../App/Inc/can_params.h:
 ../App/Inc/can_system.h:

@@ -25,3 +25,7 @@
 ../App/systems/can_system.c:977:6:CanSystem_SetInt32	16	static
 ../App/systems/can_system.c:993:6:CanSystem_SetFloat	16	static
 ../App/systems/can_system.c:1012:6:CanSystem_Transmit	56	static
+<<<<<<< HEAD
+=======
+../App/systems/can_system.c:1026:6:CanSystem_Receive	48	static
+>>>>>>> 861de1f932ad4e7e6955641d40c3b4d457ce9318
