@@ -81,7 +81,7 @@ static const ServoDef_t s_servo_defs[] =
     .feedback = { .has_feedback = false },
   },
   {
-    .name = "DFRobot SER0067",
+    .name = "DFRobot Dual Mode",
     .modes = { .position = true, .velocity = false },
     .type = SERVO_TYPE_STANDARD,
 
@@ -97,6 +97,26 @@ static const ServoDef_t s_servo_defs[] =
     .vel_deg_s_per_us = 0.0f,
 
     .max_speed_deg_s = 252.0f,
+
+    .feedback = { .has_feedback = false },
+  },
+  {
+    .name = "GoBilda Dual Mode 5-Turn",
+    .modes = { .position = true, .velocity = false },
+    .type = SERVO_TYPE_STANDARD,
+
+    .pwm_min_us = 500,
+    .pwm_max_us = 2500,
+
+    .max_rotation_deg = 1800.0f,
+    .max_diff_position_deg = 1800.0f,
+
+    .travel_deg_per_us = 0.180f,
+
+    .vel_neutral_us = 1500,
+    .vel_deg_s_per_us = 0.0f,
+
+    .max_speed_deg_s = 690.0f,
 
     .feedback = { .has_feedback = false },
   }
@@ -221,24 +241,84 @@ static const char* s_can_spec_req[SERVO_CAN_COUNT] =
   "SERVO_PCB_C.servo_spec_req_5",
 };
 
-static const char* s_can_pos_out[SERVO_CAN_COUNT] =
+static const char* s_can_pos_out[SERVO_CAN_COUNT][3] =
 {
-  "SERVO_PCB_R.motor_position_0",
-  "SERVO_PCB_R.motor_position_1",
-  "SERVO_PCB_R.motor_position_2",
-  "SERVO_PCB_R.motor_position_3",
-  "SERVO_PCB_R.motor_position_4",
-  "SERVO_PCB_R.motor_position_5",
+  // Servo 0
+  {
+    "SERVO_PCB_R.motor_position_0", // Position Command Response
+    "SERVO_PCB_R.motor_position_6", // Velocity Command Response
+    "SERVO_PCB_R.motor_position_12" // Motor State Command Response
+  },
+  // Servo 1
+  {
+    "SERVO_PCB_R.motor_position_1",
+    "SERVO_PCB_R.motor_position_7",
+    "SERVO_PCB_R.motor_position_13"
+  },
+  // Servo 2
+  {
+    "SERVO_PCB_R.motor_position_2",
+    "SERVO_PCB_R.motor_position_8",
+    "SERVO_PCB_R.motor_position_14"
+  },
+  // Servo 3
+  {
+    "SERVO_PCB_R.motor_position_3",
+    "SERVO_PCB_R.motor_position_9",
+    "SERVO_PCB_R.motor_position_15"
+  },
+  // Servo 4
+  {
+    "SERVO_PCB_R.motor_position_4",
+    "SERVO_PCB_R.motor_position_10",
+    "SERVO_PCB_R.motor_position_16"
+  },
+  // Servo 5
+  {
+    "SERVO_PCB_R.motor_position_5",
+    "SERVO_PCB_R.motor_position_11",
+    "SERVO_PCB_R.motor_position_17"
+  }
 };
 
-static const char* s_can_vel_out[SERVO_CAN_COUNT] =
+static const char* s_can_vel_out[SERVO_CAN_COUNT][3] =
 {
-  "SERVO_PCB_R.motor_velocity_0",
-  "SERVO_PCB_R.motor_velocity_1",
-  "SERVO_PCB_R.motor_velocity_2",
-  "SERVO_PCB_R.motor_velocity_3",
-  "SERVO_PCB_R.motor_velocity_4",
-  "SERVO_PCB_R.motor_velocity_5",
+  // Servo 0
+  {
+    "SERVO_PCB_R.motor_velocity_0", // Position Command Response
+    "SERVO_PCB_R.motor_velocity_6", // Velocity Command Response
+    "SERVO_PCB_R.motor_velocity_12" // Motor State Command Response
+  },
+  // Servo 1
+  {
+    "SERVO_PCB_R.motor_velocity_1",
+    "SERVO_PCB_R.motor_velocity_7",
+    "SERVO_PCB_R.motor_velocity_13"
+  },
+  // Servo 2
+  {
+    "SERVO_PCB_R.motor_velocity_2",
+    "SERVO_PCB_R.motor_velocity_8",
+    "SERVO_PCB_R.motor_velocity_14"
+  },
+  // Servo 3
+  {
+    "SERVO_PCB_R.motor_velocity_3",
+    "SERVO_PCB_R.motor_velocity_9",
+    "SERVO_PCB_R.motor_velocity_15"
+  },
+  // Servo 4
+  {
+    "SERVO_PCB_R.motor_velocity_4",
+    "SERVO_PCB_R.motor_velocity_10",
+    "SERVO_PCB_R.motor_velocity_16"
+  },
+  // Servo 5
+  {
+    "SERVO_PCB_R.motor_velocity_5",
+    "SERVO_PCB_R.motor_velocity_11",
+    "SERVO_PCB_R.motor_velocity_17"
+  }
 };
 
 static const char* s_can_motor_status[SERVO_CAN_COUNT] =
@@ -561,6 +641,22 @@ static void init_internal_once(void)
     set_vcc(p, true);
     set_pwm_us(p, s_servo_defs[SERVO_MODEL_HS_645MG].pwm_min_us);
   }
+
+  // TESTING
+  // Overwriting port 1 with DFRobot servo
+  s_ports[1].model_id = SERVO_MODEL_DFROBOT;
+  set_vcc(1, true);
+  set_pwm_us(1, s_servo_defs[SERVO_MODEL_DFROBOT].pwm_min_us);
+
+  // Overwriting port 2 with DFRobot servo
+  s_ports[2].model_id = SERVO_MODEL_DFROBOT;
+  set_vcc(2, true);
+  set_pwm_us(2, s_servo_defs[SERVO_MODEL_DFROBOT].pwm_min_us);
+
+  // Overwriting port 3 with GOBilda servo
+  s_ports[3].model_id = SERVO_MODEL_GOBILDA_5TURN;
+  set_vcc(3, true);
+  set_pwm_us(3, s_servo_defs[SERVO_MODEL_GOBILDA_5TURN].pwm_min_us);
 }
 
 /* =========================
@@ -586,8 +682,11 @@ static void publish_vectors(uint8_t port)
     (void)compute_position_from_pwm(def, s_ports[port].current_pwm_us, &pos_out);
   }
 
-  (void)CanSystem_SetInt32(s_can_pos_out[port], pos_out);
-  (void)CanSystem_SetInt32(s_can_vel_out[port], vel_out);
+  for (int i = 0; i < 3; i++)
+  {
+    (void)CanSystem_SetInt32(s_can_pos_out[port][i], pos_out);
+    (void)CanSystem_SetInt32(s_can_vel_out[port][i], vel_out);
+  }
 }
 
 /* =========================
@@ -688,6 +787,41 @@ bool ServoSystem_SetVelocityDegS(uint8_t port, float velocity_deg_s)
   return false;
 }
 
+void ServoSystem_OnMotorStatusCmd(uint8_t port)
+{
+  if (!is_port_valid(port)) return;
+  GPIO_PinState state = HAL_GPIO_ReadPin(s_hw[port].vcc_port, s_hw[port].vcc_pin);
+  const ServoDef_t* def = get_def(s_ports[port].model_id);
+
+  // TODO: COMPLETE THIS WITH EVERYTHING ELSE
+  if (state == GPIO_PIN_RESET) {
+    (void)CanSystem_SetInt32(s_can_motor_status[port], MOTOR_STATUS_STOPPED);
+  }
+  else if(def->type == SERVO_TYPE_CONTINUOUS && state != GPIO_PIN_RESET){
+    (void)CanSystem_SetInt32(s_can_motor_status[port], MOTOR_STATUS_VELOCITY_CONTROL);
+  }
+  else if(def->type == SERVO_TYPE_STANDARD && state != GPIO_PIN_RESET){
+    (void)CanSystem_SetInt32(s_can_motor_status[port], MOTOR_STATUS_POSITION_CONTROL);
+  }
+  else if(def->type == SERVO_TYPE_UNDEFINED && state != GPIO_PIN_RESET){
+    (void)CanSystem_SetInt32(s_can_motor_status[port], MOTOR_STATUS_IDLE);
+  }
+  else{
+    (void)CanSystem_SetInt32(s_can_motor_status[port], MOTOR_STATUS_UNDEFINED);
+  }
+}
+
+void ServoSystem_OnMotorSpecCmd(uint8_t port)
+{
+  if (!is_port_valid(port)) return;
+
+  const ServoDef_t* def = get_def(s_ports[port].model_id);
+
+  (void)CanSystem_SetInt32(s_can_servo_type[port], def->type);
+  (void)CanSystem_SetInt32(s_can_pos_max[port], def->max_rotation_deg);
+  (void)CanSystem_SetInt32(s_can_vel_max[port], def->max_speed_deg_s);
+}
+
 void ServoSystem_Controller(void)
 {
   if (!s_inited)
@@ -698,72 +832,7 @@ void ServoSystem_Controller(void)
 
   for (uint8_t i = 0; i < SERVO_CAN_COUNT; i++)
   {
-    /*
-    int32_t status_req = 0;
-    if (CanParams_GetInt32(s_can_motor_status_req[i], &status_req))
-    {
-      if (!s_rx_inited || (status_req != s_can_motor_status_req[i]))
-      {
-        s_can_motor_status_req[i] = status_req;
-
-        switch ((uint8_t)status_req)
-        {
-          case 0: ; break;
-          case 1: ; break;
-          case 2: ; break;
-          case 3: ; break;
-          case 4: ; break;
-          case 5: ; break;
-          case 6: ; break;
-          case 7: ; break;
-          case 8: ; break;
-          case 9: ; break;
-          case 10: ; break;
-          case 11: ; break;
-          default: break;
-        }
-      }
-    }
-    */
-
-    int32_t gen = 0;
-    if (CanParams_GetInt32(s_can_maint_cmd[i], &gen))
-    {
-      if (!s_rx_inited || (gen != s_can_maint_cmd[i]))
-      {
-        s_can_maint_cmd[i] = gen;
-
-        switch ((uint8_t)gen)
-        {
-          case 0: ServoSystem_OnSetZero(i); break;
-          case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); break;
-          case 2: ServoSystem_OnStopMotor(i); stop_motor(i); break;
-          case 3: ServoSystem_OnShutdownMotor(i); set_vcc(i, false); break;
-          case 4: ServoSystem_OnClearErrors(i); break;
-          default: break;
-        }
-      }
-    }
-
-    int32_t spec_req = 0;
-    if (CanParams_GetBool(s_can_spec_req[i], &spec_req))
-    {
-      if (!s_rx_inited || (spec_req != s_can_spec_req[i]))
-      {
-        s_can_spec_req[i] = spec_req;
-        if ((uint8_t)spec_req)
-        {
-          s_can_servo_type[i] = ServoSystem_GetServoType(i);
-          s_can_pos_max[i] = ServoSystem_GetPosMax(i);
-          s_can_vel_max[i] = ServoSystem_GetVelMax(i);
-        }
-        else
-        {
-          break;
-        }
-      }
-    }
-
+    // Position Command Frame
     int32_t pos_tgt = 0;
     if (CanParams_GetInt32(s_can_pos_tgt[i], &pos_tgt))
     {
@@ -774,6 +843,7 @@ void ServoSystem_Controller(void)
       }
     }
 
+    // Velocity Command Frame
     int32_t vel_tgt = 0;
     if (CanParams_GetInt32(s_can_vel_tgt[i], &vel_tgt))
     {
@@ -783,8 +853,64 @@ void ServoSystem_Controller(void)
         (void)ServoSystem_SetVelocityDegS(i, (float)vel_tgt);
       }
     }
-  }
+  
+    // Motor Status Frame
+    bool status_req = 0;
+    if (CanParams_GetBool(s_can_mot_status_req[i], &status_req))
+    {
+      if (!s_rx_inited)
+      {
+        if(status_req == 1)
+        {
+          ServoSystem_OnMotorStatusCmd(i);
+        }
+      }
+    }
 
+    // Motor State Frame
+    bool state_req = 0;
+    if (CanParams_GetBool(s_can_mot_state_req[i], &state_req))
+    {
+      if (!s_rx_inited)
+      {
+        if(state_req == 1)
+        {
+          publish_vectors(i);
+        }
+      }
+    }
+    
+    // Maintenance Frame
+    int32_t gen = 0;
+    if (CanParams_GetInt32(s_can_maint_cmd[i], &gen))
+    {
+      if (!s_rx_inited)
+      {
+        switch ((uint8_t)gen)
+        {
+          case 0: ServoSystem_OnSetZero(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break;
+          case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
+          case 2: ServoSystem_OnStopMotor(i); stop_motor(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break;
+          case 3: ServoSystem_OnShutdownMotor(i); set_vcc(i, false); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break;
+          case 4: ServoSystem_OnClearErrors(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break;
+          default: (void)CanSystem_SetInt32(s_can_maint_succ[i], 0); break;
+        }
+      }
+    }
+
+    // Servo Specifications Frame
+    bool spec_req = 0;
+    if (CanParams_GetBool(s_can_spec_req[i], &spec_req))
+    {
+      if (!s_rx_inited)
+      {
+        if ((uint8_t)spec_req)
+        {
+          ServoSystem_OnMotorSpecCmd(i);
+        }
+      }
+    }
+  }
   s_rx_inited = 1U;
 }
 
