@@ -43,7 +43,7 @@ void heartbeat_system_controller(void)
 
     if (delay_elapsed(&heartbeat_timer, hb_ms))
     {
-        (void)CanSystem_SetInt32("SERVO_PCB_R.status_0", 0);
+        (void)CanSystem_SetInt32("SERVO_PCB_R.heartbeat_success", 1);
     }
 }
 

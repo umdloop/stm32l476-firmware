@@ -111,7 +111,7 @@ static const ServoDef_t s_servo_defs[] =
     .max_rotation_deg = 1800.0f,
     .max_diff_position_deg = 1800.0f,
 
-    .travel_deg_per_us = 0.180f,
+    .travel_deg_per_us = 0.9f,
 
     .vel_neutral_us = 1500,
     .vel_deg_s_per_us = 0.0f,
@@ -119,7 +119,67 @@ static const ServoDef_t s_servo_defs[] =
     .max_speed_deg_s = 690.0f,
 
     .feedback = { .has_feedback = false },
-  }
+  },
+  {
+    .name  = "HiTec HS-5055MG",
+    .modes = { .position = true, .velocity = false },
+    .type = SERVO_TYPE_STANDARD,
+
+    .pwm_min_us = 900,
+    .pwm_max_us = 2100,
+
+    .max_rotation_deg = 125.0f,
+    .max_diff_position_deg = 125.0f,
+
+    .travel_deg_per_us = 0.10f,
+
+    .vel_neutral_us = 1500,
+    .vel_deg_s_per_us = 0.0f,
+
+    .max_speed_deg_s = 352.0f,
+
+    .feedback = { .has_feedback = false },
+  },
+  {
+      .name = "FeeTech FT6335M",
+      .modes = { .position = true, .velocity = false },
+      .type = SERVO_TYPE_STANDARD,
+
+      .pwm_min_us = 500,
+      .pwm_max_us = 2500,
+
+      .max_rotation_deg = 360.0f,
+      .max_diff_position_deg = 360.0f,
+
+      .travel_deg_per_us = 0.18f,
+
+      .vel_neutral_us = 1500,
+      .vel_deg_s_per_us = 0.0f,
+
+      .max_speed_deg_s = 312.5f,  // ~0.12s/60° equivalent
+
+      .feedback = { .has_feedback = false }
+  },
+  {
+      .name = "MG-90S",
+      .modes = { .position = true, .velocity = false },
+      .type = SERVO_TYPE_STANDARD,
+
+      .pwm_min_us = 1000,
+      .pwm_max_us = 2000,
+
+      .max_rotation_deg = 150.0f,
+      .max_diff_position_deg = 150.0f,
+
+      .travel_deg_per_us = 0.15f,
+
+      .vel_neutral_us = 1500,
+      .vel_deg_s_per_us = 0.0f,
+
+      .max_speed_deg_s = 600.0f,  // ~0.12s/60° equivalent
+
+      .feedback = { .has_feedback = false }
+  },
 };
 
 static const uint8_t s_servo_defs_count = (uint8_t)(sizeof(s_servo_defs) / sizeof(s_servo_defs[0]));
@@ -372,9 +432,12 @@ static const char* s_can_vel_max[SERVO_CAN_COUNT] =
 };
 
 static uint8_t s_rx_inited = 0U;
-static int32_t s_last_maint_cmd[SERVO_CAN_COUNT];
 static int32_t s_last_pos_tgt[SERVO_CAN_COUNT];
 static int32_t s_last_vel_tgt[SERVO_CAN_COUNT];
+static int32_t s_last_state_req[SERVO_CAN_COUNT];
+static int32_t s_last_status_req[SERVO_CAN_COUNT];
+static int32_t s_last_maint_req[SERVO_CAN_COUNT];
+static int32_t s_last_spec_req[SERVO_CAN_COUNT];
 
 /* Weak callbacks */
 __attribute__((weak)) void ServoSystem_OnSetZero(uint8_t port)        { (void)port; }
@@ -548,9 +611,12 @@ static void init_internal_once(void)
   s_rx_inited = 0U;
   for (uint8_t i = 0; i < SERVO_CAN_COUNT; i++)
   {
-    s_last_maint_cmd[i] = -999999;
     s_last_pos_tgt[i] = -999999;
     s_last_vel_tgt[i] = -999999;
+    s_last_state_req[i] = -999999;
+    s_last_status_req[i] = -999999;
+    s_last_maint_req[i] = -999999;
+    s_last_spec_req[i] = -999999;
   }
 
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -643,20 +709,36 @@ static void init_internal_once(void)
   }
 
   // TESTING
-  // Overwriting port 1 with DFRobot servo
-  s_ports[1].model_id = SERVO_MODEL_DFROBOT;
+  // Port 0, which is technically port 6 does not work
+  // Overwriting port 1 with GOBilda servo
+  s_ports[1].model_id = SERVO_MODEL_GOBILDA_5TURN;
   set_vcc(1, true);
-  set_pwm_us(1, s_servo_defs[SERVO_MODEL_DFROBOT].pwm_min_us);
+  set_pwm_us(1, s_servo_defs[SERVO_MODEL_GOBILDA_5TURN].pwm_min_us);
 
-  // Overwriting port 2 with DFRobot servo
-  s_ports[2].model_id = SERVO_MODEL_DFROBOT;
+  // Overwriting port 2 with GOBilda servo
+  s_ports[2].model_id = SERVO_MODEL_GOBILDA_5TURN;
   set_vcc(2, true);
-  set_pwm_us(2, s_servo_defs[SERVO_MODEL_DFROBOT].pwm_min_us);
+  set_pwm_us(2, s_servo_defs[SERVO_MODEL_GOBILDA_5TURN].pwm_min_us);
 
-  // Overwriting port 3 with GOBilda servo
-  s_ports[3].model_id = SERVO_MODEL_GOBILDA_5TURN;
+  // Overwriting port 3 with HS_5055MG servo
+  s_ports[3].model_id = SERVO_MODEL_HS_5055MG;
   set_vcc(3, true);
-  set_pwm_us(3, s_servo_defs[SERVO_MODEL_GOBILDA_5TURN].pwm_min_us);
+  set_pwm_us(3, s_servo_defs[SERVO_MODEL_HS_5055MG].pwm_min_us);
+
+  // Port 4 does not work
+
+  // Overwriting port 5 with HS_5055MG servo
+  s_ports[5].model_id = SERVO_MODEL_HS_5055MG;
+  set_vcc(5, true);
+  set_pwm_us(5, s_servo_defs[SERVO_MODEL_HS_5055MG].pwm_min_us);
+
+  // Overwriting port 6, which is technically 0, is FT_6335M servo
+  s_ports[0].model_id = SERVO_MODEL_FT_6335M;
+  set_vcc(0, true);
+  set_pwm_us(0, s_servo_defs[SERVO_MODEL_FT_6335M].pwm_min_us);
+
+  // Port 7 does not work
+
 }
 
 /* =========================
@@ -855,38 +937,44 @@ void ServoSystem_Controller(void)
     }
   
     // Motor Status Frame
-    bool status_req = 0;
-    if (CanParams_GetBool(s_can_mot_status_req[i], &status_req))
+    int32_t status_req = 0;
+    if (CanParams_GetInt32(s_can_mot_status_req[i], &status_req))
     {
-      if (!s_rx_inited)
+      if (!s_rx_inited || (status_req != s_last_status_req[i]))
       {
+        s_last_status_req[i] = status_req;
         if(status_req == 1)
         {
           ServoSystem_OnMotorStatusCmd(i);
+          s_last_status_req[i] = 0;
         }
       }
     }
 
     // Motor State Frame
-    bool state_req = 0;
-    if (CanParams_GetBool(s_can_mot_state_req[i], &state_req))
+    int32_t state_req = 0;
+    if (CanParams_GetInt32(s_can_mot_state_req[i], &state_req))
     {
-      if (!s_rx_inited)
+
+      if (!s_rx_inited || (state_req != s_last_state_req[i]))
       {
+        s_last_state_req[i] = state_req;
         if(state_req == 1)
         {
           publish_vectors(i);
+          s_last_state_req[i] = 0;
         }
       }
     }
     
     // Maintenance Frame
-    int32_t gen = 0;
-    if (CanParams_GetInt32(s_can_maint_cmd[i], &gen))
+    int32_t maint = 0;
+    if (CanParams_GetInt32(s_can_maint_cmd[i], &maint))
     {
-      if (!s_rx_inited)
+      if (!s_rx_inited || (maint != s_last_maint_req[i]))
       {
-        switch ((uint8_t)gen)
+        s_last_maint_req[i] = maint;
+        switch ((uint8_t)maint)
         {
           case 0: ServoSystem_OnSetZero(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break;
           case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanSystem_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
@@ -899,14 +987,16 @@ void ServoSystem_Controller(void)
     }
 
     // Servo Specifications Frame
-    bool spec_req = 0;
-    if (CanParams_GetBool(s_can_spec_req[i], &spec_req))
+    int32_t spec_req = 0;
+    if (CanParams_GetInt32(s_can_spec_req[i], &spec_req))
     {
-      if (!s_rx_inited)
+      if (!s_rx_inited || (spec_req != s_last_spec_req[i]))
       {
+        s_last_spec_req[i] = spec_req;
         if ((uint8_t)spec_req)
         {
           ServoSystem_OnMotorSpecCmd(i);
+          s_last_spec_req[i] = 0;
         }
       }
     }

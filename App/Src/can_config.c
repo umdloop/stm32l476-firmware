@@ -12,7 +12,8 @@
 
 const uint32_t g_can_rx_id_filter[] =
 {
-  /* empty = accept all */
+  0x080,
+  0x081
 };
 
 const size_t g_can_rx_id_filter_count = (sizeof(g_can_rx_id_filter) / sizeof(g_can_rx_id_filter[0]));
