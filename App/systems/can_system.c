@@ -13,7 +13,7 @@
 
 /* DBC text blob (generated from App/dbc/can_dbc_text.c) */
 extern const char* g_can_dbc_text;
-extern CAN_HandleTypeDef hcan1;
+
 /* =========================
  *  DBC parsing
  * ========================= */
@@ -1009,47 +1009,23 @@ bool CanSystem_SetFloat(const char* full_name, float value)
     return true;
 }
 
-<<<<<<< HEAD
-void CanSystem_Transmit(uint32_t arbitration_id, uint8_t* payload, uint8_t len) {
+
+#include "can_system.h"
+#include "can.h" // HAL CAN handle
+
+void CanSystem_Transmit(uint32_t id, uint8_t* data, uint8_t len) {
     CAN_TxHeaderTypeDef tx_header;
     uint32_t tx_mailbox;
 
-    tx_header.StdId = arbitration_id;
-    tx_header.ExtId = 0;
-    tx_header.IDE = CAN_ID_STD;
+    tx_header.StdId = id;                // Standard ID (0x90, etc)
     tx_header.RTR = CAN_RTR_DATA;
-    tx_header.DLC = len;
+    tx_header.IDE = CAN_ID_STD;
+    tx_header.DLC = (len > 8) ? 8 : len; // Max 8 bytes
     tx_header.TransmitGlobalTime = DISABLE;
 
-    // Request HAL to send the message
-    if (HAL_CAN_AddTxMessage(&hcan1, &tx_header, payload, &tx_mailbox) != HAL_OK) {
+    // Use &hcan1 as initialized in main.c via MX_CAN1_Init()
+    if (HAL_CAN_AddTxMessage(&hcan1, &tx_header, data, &tx_mailbox) != HAL_OK) {
+        // Handle error (e.g., mailboxes full)
+        Error_Handler();
     }
-=======
-void CanSystem_Transmit(uint32_t id, uint8_t* data, uint8_t len) {
-    CAN_TxHeaderTypeDef header;
-    uint32_t mailbox;
-
-    header.StdId = id;
-    header.ExtId = 0;
-    header.IDE = CAN_ID_STD;
-    header.RTR = CAN_RTR_DATA;
-    header.DLC = len;
-    header.TransmitGlobalTime = DISABLE;
-
-    HAL_CAN_AddTxMessage(&hcan1, &header, data, &mailbox);
-}
-
-bool CanSystem_Receive(CanFrame_t* frame) {
-    CAN_RxHeaderTypeDef header;
-
-    // Check if there is a message in FIFO 0
-    if (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) > 0) {
-        if (HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &header, frame->data) == HAL_OK) {
-            frame->can_id = header.StdId;
-            frame->len = header.DLC;
-            return true;
-        }
-    }
-    return false;
->>>>>>> 861de1f932ad4e7e6955641d40c3b4d457ce9318
 }

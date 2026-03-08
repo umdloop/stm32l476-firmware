@@ -29,11 +29,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
- ../Platform/Inc/system_clock.h ../Platform/Inc/gpio.h \
- ../Platform/Inc/can.h ../Platform/Inc/usart.h ../Platform/Inc/tim.h \
- ../App/Inc/can_system.h ../App/Inc/rr_scheduler.h \
- ../App/Inc/pcb_led_system.h ../App/Inc/heartbeat_system.h \
- ../App/Inc/stepper_system.h
+ ../Core/Src/../../Platform/Inc/system_clock.h \
+ ../Core/Src/../../Platform/Inc/gpio.h \
+ ../Core/Src/../../Platform/Inc/tim.h
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -65,13 +63,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h:
-../Platform/Inc/system_clock.h:
-../Platform/Inc/gpio.h:
-../Platform/Inc/can.h:
-../Platform/Inc/usart.h:
-../Platform/Inc/tim.h:
-../App/Inc/can_system.h:
-../App/Inc/rr_scheduler.h:
-../App/Inc/pcb_led_system.h:
-../App/Inc/heartbeat_system.h:
-../App/Inc/stepper_system.h:
+../Core/Src/../../Platform/Inc/system_clock.h:
+../Core/Src/../../Platform/Inc/gpio.h:
+../Core/Src/../../Platform/Inc/tim.h:
