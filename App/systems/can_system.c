@@ -1008,24 +1008,3 @@ bool CanSystem_SetFloat(const char* full_name, float value)
     (void)CanParams_SetBool("pending_outbox", true);
     return true;
 }
-
-
-#include "can_system.h"
-#include "can.h" // HAL CAN handle
-
-void CanSystem_Transmit(uint32_t id, uint8_t* data, uint8_t len) {
-    CAN_TxHeaderTypeDef tx_header;
-    uint32_t tx_mailbox;
-
-    tx_header.StdId = id;                // Standard ID (0x90, etc)
-    tx_header.RTR = CAN_RTR_DATA;
-    tx_header.IDE = CAN_ID_STD;
-    tx_header.DLC = (len > 8) ? 8 : len; // Max 8 bytes
-    tx_header.TransmitGlobalTime = DISABLE;
-
-    // Use &hcan1 as initialized in main.c via MX_CAN1_Init()
-    if (HAL_CAN_AddTxMessage(&hcan1, &tx_header, data, &tx_mailbox) != HAL_OK) {
-        // Handle error (e.g., mailboxes full)
-        Error_Handler();
-    }
-}

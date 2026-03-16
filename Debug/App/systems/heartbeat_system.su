@@ -1,2 +1,2 @@
-../App/systems/heartbeat_system.c:11:13:delay_elapsed	24	static
-../App/systems/heartbeat_system.c:22:6:heartbeat_system_controller	24	static
+../App/systems/heartbeat_system.c:13:13:delay_elapsed	24	static
+../App/systems/heartbeat_system.c:24:6:heartbeat_system_controller	16	static
