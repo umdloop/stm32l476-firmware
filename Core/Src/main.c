@@ -42,12 +42,11 @@ int main(void)
    */
   // RR_AddController(ex_system_controller);
   // RR_AddController(dbc_examples_system_controller);
-
-  //RR_AddController(test_pwm_system_controller);
+  // RR_AddController(test_pwm_system_controller);
   while (1)
   {
     RR_Scheduler_Tick();
-    HAL_Delay(100); // Never use this.
-    CanSystem_SendRaw("081#1122334455667788");
+    // HAL_Delay(100); // Never use this except in the most basic testing.
+    // CanSystem_SendRaw("081#1122334455667788");
   }
 }
