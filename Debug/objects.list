@@ -3,6 +3,7 @@
 "./App/dbc/can_dbc_text.o"
 "./App/rr/rr_scheduler.o"
 "./App/systems/can_system.o"
+"./App/systems/copy_rename_me_system.o"
 "./App/systems/dbc_examples_system.o"
 "./App/systems/ex_system.o"
 "./App/systems/heartbeat_system.o"
