@@ -65,8 +65,8 @@ all: main-build
 main-build: stm32l476-firmware.elf secondary-outputs
 
 # Tool invocations
-stm32l476-firmware.elf stm32l476-firmware.map: $(OBJS) $(USER_OBJS) C:\Users\John\Desktop\stm32l476-firmware\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stm32l476-firmware.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\John\Desktop\stm32l476-firmware\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32l476-firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stm32l476-firmware.elf stm32l476-firmware.map: $(OBJS) $(USER_OBJS) C:\Users\asgar\Documents\UMD_LOOP\stm32l476-firmware\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stm32l476-firmware.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\asgar\Documents\UMD_LOOP\stm32l476-firmware\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32l476-firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
