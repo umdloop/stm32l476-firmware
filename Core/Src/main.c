@@ -36,8 +36,8 @@ int main(void)
   /* Core application systems */
   RR_AddController(pcb_led_system_controller);
   RR_AddController(heartbeat_system_controller);
-  //RR_AddController(servo_system_controller);
-  RR_AddController(dc_motor_system_controller);
+  // RR_AddController(servo_system_controller);
+  // RR_AddController(dc_motor_system_controller);
 
   /* Optional example/demo systems. Uncomment when you want to exercise the
    * CAN API or canned DBC response flows from a bus analyzer.
