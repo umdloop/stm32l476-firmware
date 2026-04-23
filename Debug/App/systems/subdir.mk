@@ -6,33 +6,30 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../App/systems/can_system.c \
-../App/systems/copy&renameME_system.c \
+../App/systems/copy_rename_me_system.c \
 ../App/systems/dbc_examples_system.c \
 ../App/systems/ex_system.c \
 ../App/systems/heartbeat_system.c \
-../App/systems/l298n_stepper_system.c \
 ../App/systems/pcb_led_system.c \
 ../App/systems/servo_system.c \
 ../App/systems/test_pwm_system.c 
 
 OBJS += \
 ./App/systems/can_system.o \
-./App/systems/copy&renameME_system.o \
+./App/systems/copy_rename_me_system.o \
 ./App/systems/dbc_examples_system.o \
 ./App/systems/ex_system.o \
 ./App/systems/heartbeat_system.o \
-./App/systems/l298n_stepper_system.o \
 ./App/systems/pcb_led_system.o \
 ./App/systems/servo_system.o \
 ./App/systems/test_pwm_system.o 
 
 C_DEPS += \
 ./App/systems/can_system.d \
-./App/systems/copy&renameME_system.d \
+./App/systems/copy_rename_me_system.d \
 ./App/systems/dbc_examples_system.d \
 ./App/systems/ex_system.d \
 ./App/systems/heartbeat_system.d \
-./App/systems/l298n_stepper_system.d \
 ./App/systems/pcb_led_system.d \
 ./App/systems/servo_system.d \
 ./App/systems/test_pwm_system.d 
@@ -45,7 +42,7 @@ App/systems/%.o App/systems/%.su App/systems/%.cyclo: ../App/systems/%.c App/sys
 clean: clean-App-2f-systems
 
 clean-App-2f-systems:
-	-$(RM) ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/copy&renameME_system.cyclo ./App/systems/copy&renameME_system.d ./App/systems/copy&renameME_system.o ./App/systems/copy&renameME_system.su ./App/systems/dbc_examples_system.cyclo ./App/systems/dbc_examples_system.d ./App/systems/dbc_examples_system.o ./App/systems/dbc_examples_system.su ./App/systems/ex_system.cyclo ./App/systems/ex_system.d ./App/systems/ex_system.o ./App/systems/ex_system.su ./App/systems/heartbeat_system.cyclo ./App/systems/heartbeat_system.d ./App/systems/heartbeat_system.o ./App/systems/heartbeat_system.su ./App/systems/l298n_stepper_system.cyclo ./App/systems/l298n_stepper_system.d ./App/systems/l298n_stepper_system.o ./App/systems/l298n_stepper_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su ./App/systems/servo_system.cyclo ./App/systems/servo_system.d ./App/systems/servo_system.o ./App/systems/servo_system.su ./App/systems/test_pwm_system.cyclo ./App/systems/test_pwm_system.d ./App/systems/test_pwm_system.o ./App/systems/test_pwm_system.su
+	-$(RM) ./App/systems/can_system.cyclo ./App/systems/can_system.d ./App/systems/can_system.o ./App/systems/can_system.su ./App/systems/copy_rename_me_system.cyclo ./App/systems/copy_rename_me_system.d ./App/systems/copy_rename_me_system.o ./App/systems/copy_rename_me_system.su ./App/systems/dbc_examples_system.cyclo ./App/systems/dbc_examples_system.d ./App/systems/dbc_examples_system.o ./App/systems/dbc_examples_system.su ./App/systems/ex_system.cyclo ./App/systems/ex_system.d ./App/systems/ex_system.o ./App/systems/ex_system.su ./App/systems/heartbeat_system.cyclo ./App/systems/heartbeat_system.d ./App/systems/heartbeat_system.o ./App/systems/heartbeat_system.su ./App/systems/pcb_led_system.cyclo ./App/systems/pcb_led_system.d ./App/systems/pcb_led_system.o ./App/systems/pcb_led_system.su ./App/systems/servo_system.cyclo ./App/systems/servo_system.d ./App/systems/servo_system.o ./App/systems/servo_system.su ./App/systems/test_pwm_system.cyclo ./App/systems/test_pwm_system.d ./App/systems/test_pwm_system.o ./App/systems/test_pwm_system.su
 
 .PHONY: clean-App-2f-systems
 
