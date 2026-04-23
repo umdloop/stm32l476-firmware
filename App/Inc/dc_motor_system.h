@@ -9,11 +9,10 @@ extern "C" {
 #include <stdint.h>
 
 bool dc_motor_system_init(void);
-
 void dc_motor_system_controller(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* DC_MOTOR_SYSTEM_H */
