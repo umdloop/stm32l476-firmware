@@ -1,2 +1,0 @@
-../App/systems/pcb_led_system.c:10:13:init_once	1
-../App/systems/pcb_led_system.c:16:6:pcb_led_system_controller	7
