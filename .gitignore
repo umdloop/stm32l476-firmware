@@ -1,9 +1,25 @@
+#settings
+.settings/
+
+#metadata
+.metadata/
+
+#Debug
 Debug/
+debug/
 Release/
-*.o
+release
+
+# Prerequisites
 *.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
 *.su
 *.cyclo
-*.elf
 *.map
 *.list
