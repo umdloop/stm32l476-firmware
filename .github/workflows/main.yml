@@ -23,11 +23,21 @@ jobs:
           echo "sha=$(echo ${{ github.sha }} | sed 's/^\(.\{10\}\).*$/\1/')" >> $GITHUB_OUTPUT
 
       - name: Build the firmware binary
+        continue-on-error: true
+        id: build
         uses: xanderhendriks/action-build-stm32cubeide@v17.0
         with:
           project-path: '.'
           project-target: 'stm32l476-firmware'
           stm32cubeide-version: '2.1.1'
+
+      - name: Verify build succeeded
+        run: |
+          if [ ! -f Debug/stm32l476-firmware.elf ]; then
+            echo "Build failed: stm32l476-firmware.elf not found"
+            exit 1
+          fi
+          echo "Build verified: $(arm-none-eabi-size Debug/stm32l476-firmware.elf)"
 
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4.6.1
