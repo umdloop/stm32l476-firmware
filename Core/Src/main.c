@@ -35,7 +35,7 @@ int main(void)
   RR_AddController(can_system_controller);
 
   /* Core application systems */
-  RR_AddController(pcb_led_system_controller);
+  //RR_AddController(pcb_led_system_controller);
   RR_AddController(heartbeat_system_controller);
   RR_AddController(l298n_stepper_system_controller);
 

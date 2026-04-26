@@ -13,7 +13,6 @@
 
 
 
-
 /*
  * =======================================================================
  * ASSUMES THE FOLLOWING
@@ -40,6 +39,24 @@
 
 
 l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
+
+
+		GPIOA, GPIO_PIN_6,
+		GPIOA, GPIO_PIN_5,
+		GPIOC, GPIO_PIN_4,
+		GPIOA, GPIO_PIN_4,
+		GPIOC, GPIO_PIN_5,
+		GPIOA, GPIO_PIN_7,
+
+		400,
+		0, (1<<31),0, 912,
+		0,0,
+		0,0,0
+
+
+
+
+
 
 
 
@@ -369,7 +386,7 @@ void l298n_stepper_system_controller(void){
 	if (is_init == false){l298n_stepper_system_init(); is_init = true;}
 
 
-	update_speed((l298n_stepper_driver_t*)&drivers, 5);
+	update_speed((l298n_stepper_driver_t*)&drivers, 900);
 
 
 

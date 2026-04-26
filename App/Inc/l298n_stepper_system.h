@@ -85,7 +85,7 @@ typedef struct{
  *
  */
 
-#define NUM_STEPPERS 2 //replace w number of steppers
+#define NUM_STEPPERS 1 //replace w number of steppers
 
 //EXAMPLE
 
