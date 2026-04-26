@@ -11,6 +11,9 @@
 #include "can_params.h"
 
 
+
+
+
 /*
  * =======================================================================
  * ASSUMES THE FOLLOWING
@@ -28,15 +31,27 @@
 
 #include "l298n_stepper_system.h"
 
-TIM_TypeDef* global_interrupt_clock = TIM2; //EX
 
 /*
  * ===============================================================
  * CONFIG
  * ===============================================================
  */
-l298n_stepper_driver_t drivers[NUM_STEPPERS]= {};
 
+
+l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
+
+
+
+
+
+
+
+
+
+}; // needs to be defined in the .c
+TIM_TypeDef* global_interrupt_clock = TIM2;
+uint32_t l298n_stepper_timer_period_us = 100;
 
 void step_0(l298n_stepper_driver_t* l298n){
 
@@ -145,6 +160,22 @@ static bool init_gpio(l298n_stepper_driver_t*);
 #define L298N_STEPPER_STATUS_POS_CONTR		(uint8_t)9
 #define L298N_STEPPER_STATUS_VEL_CONTR		(uint8_t)10
 #define L298N_STEPPER_STATUS_STOPPED		(uint8_t)11
+
+
+
+void turn_off_motors(l298n_stepper_driver_t* l298n){
+
+
+	HAL_GPIO_WritePin(l298n->ena_port, l298n->ena_pin, RESET);
+	HAL_GPIO_WritePin(l298n->enb_port, l298n->enb_pin, RESET);
+}
+void turn_on_motors(l298n_stepper_driver_t* l298n){
+	HAL_GPIO_WritePin(l298n->ena_port, l298n->ena_pin, SET);
+	HAL_GPIO_WritePin(l298n->enb_port, l298n->enb_pin, SET);
+
+
+
+}
 
 
 void do_step(l298n_stepper_driver_t* l298n){
@@ -319,19 +350,28 @@ static bool update_speed(l298n_stepper_driver_t* l298n, int16_t speed){
 		l298n->dir = 1;
 	}
 	else{
-		l298n->dir = 0; l298n->ticks_per_step = (1<<31); return true;
+		l298n->dir = 0; l298n->ticks_per_step = (1<<31);
+		turn_off_motors(l298n); return true;
 	}
 
 	l298n->ticks_per_step = (uint32_t)(
 	    (1000000.0f / l298n_stepper_timer_period_us) /
 	    ((float)speed / 360.0f * l298n->steps_per_rev));
+		turn_on_motors(l298n);
 	return true;
 }
 
 
-bool is_init = 0;
-void l298n_stepper_system(void){
-	if (!is_init){l298n_stepper_system_init; is_init = true;}
+
+
+bool is_init = false;
+void l298n_stepper_system_controller(void){
+	if (is_init == false){l298n_stepper_system_init(); is_init = true;}
+
+
+	update_speed((l298n_stepper_driver_t*)&drivers, 5);
+
+
 
 //	CanPa
 

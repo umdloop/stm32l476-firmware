@@ -93,7 +93,8 @@ extern l298n_stepper_driver_t drivers[NUM_STEPPERS]; // needs to be defined in t
 extern TIM_TypeDef* global_interrupt_clock;
 extern uint32_t l298n_stepper_timer_period_us; //assumes clock speed is 8mhz
 
-
+#define STEPPER_0_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_0"
+#define STEPPER_1_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_1"
 
 
 /*
