@@ -63,7 +63,7 @@ typedef struct{
     uint32_t tick_accumulator;
     uint32_t ticks_per_step;
 	uint16_t current_speed;
-	uint8_t max_speed;
+	uint16_t max_speed;
 
 	uint8_t current_step;
 	uint8_t dir;

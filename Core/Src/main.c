@@ -15,7 +15,7 @@
 #include "../../App/Inc/servo_system.h"
 #include "../../App/Inc/dbc_examples_system.h"
 #include "../../App/Inc/test_pwm_system.h"
-#include "../../App/Inc/l298n_stepper_system.h".h"
+#include "../../App/Inc/l298n_stepper_system.h"
 
 
 // Basic can testing (can raw)

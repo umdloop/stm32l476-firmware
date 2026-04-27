@@ -41,7 +41,7 @@
 l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
 
 
-		GPIOA, GPIO_PIN_6,
+		{GPIOA, GPIO_PIN_6,
 		GPIOA, GPIO_PIN_5,
 		GPIOC, GPIO_PIN_4,
 		GPIOA, GPIO_PIN_4,
@@ -52,7 +52,7 @@ l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
 		0, (1<<31),0, 912,
 		0,0,
 		0,0,0
-
+		}
 
 
 
@@ -242,7 +242,7 @@ static bool l298n_stepper_system_init(void){
 
 	for(int i = 0; i < NUM_STEPPERS; i++){
 
-		if(!init_l298n(drivers + i)) return false;
+		if(!init_l298n(&drivers[i])) return false;
 	}
 
 	init_global_clk();
