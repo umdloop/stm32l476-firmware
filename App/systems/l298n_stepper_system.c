@@ -242,7 +242,7 @@ static bool l298n_stepper_system_init(void){
 
 	for(int i = 0; i < NUM_STEPPERS; i++){
 
-		if(!init_l298n(&drivers[i])) return false;
+		if(!init_l298n((l298n_stepper_driver_t*)&drivers[i])) return false;
 	}
 
 	init_global_clk();
