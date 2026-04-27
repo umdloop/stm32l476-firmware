@@ -1,4 +1,4 @@
-#include "copy_rename_me_system.h"
+#include "adc_system.h"
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -45,7 +45,7 @@ static uint32_t s_last_tick_ms = 0U;
  * ============================================================================
  */
 
-bool copy_rename_me_system_init(void)
+bool adc_system_init(void)
 {
   /*
    * Put one-time setup here.
@@ -68,7 +68,7 @@ bool copy_rename_me_system_init(void)
  * ============================================================================
  */
 
-void copy_rename_me_system_controller(void)
+void adc_system_controller(void)
 {
   /*
    * Lazy init pattern:
