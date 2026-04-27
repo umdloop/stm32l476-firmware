@@ -37,7 +37,7 @@
  * ===============================================================
  */
 
-
+char* vel_param_names[NUM_STEPPERS] = {STEPPER_0_VEL_PARAM_NAME};
 l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
 
 
@@ -395,7 +395,7 @@ void l298n_stepper_system_controller(void){
 
 		int16_t speed = 0;
 
-		bool valid  = CanParams_GetInt32(vel_param_names[i], &speed);
+		bool valid  = CanParams_GetInt32(vel_param_names[i], (int32_t*)&speed);
 
 		if(valid){
 
