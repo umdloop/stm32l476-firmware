@@ -96,6 +96,8 @@ extern uint32_t l298n_stepper_timer_period_us; //assumes clock speed is 8mhz
 #define STEPPER_0_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_0"
 #define STEPPER_1_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_1"
 
+extern char* vel_param_names[NUM_STEPPERS];
+
 
 /*
  * Initializes any one-time state for the system.

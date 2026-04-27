@@ -386,28 +386,27 @@ void l298n_stepper_system_controller(void){
 	if (is_init == false){l298n_stepper_system_init(); is_init = true;}
 
 
-	update_speed((l298n_stepper_driver_t*)&drivers, 900);
 
 
 
-//	CanPa
+	//update_speed((l298n_stepper_driver_t*)&drivers, 900);
+
+	for (int i = 0; i < NUM_STEPPERS; i++){
+
+		int16_t speed = 0;
+
+		bool valid  = CanParams_GetInt32(vel_param_names[i], &speed);
+
+		if(valid){
+
+			update_speed((l298n_stepper_driver_t*)&drivers[i], speed);
+
+
+		}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	}
 
 
 }
