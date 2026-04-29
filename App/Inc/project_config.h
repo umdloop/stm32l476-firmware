@@ -66,14 +66,15 @@ extern "C" {
  * Keep this list aligned with the DBC message families you expect the board
  * to consume or observe on the bus.
  */
-#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
-
 #define PROJECT_CAN_ID_POWER_PCB_C            0x010U
 #define PROJECT_CAN_ID_POWER_PCB_R            0x011U
 #define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_C     0x070U
 #define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_R     0x071U
 #define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_C    0x080U
 #define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_R    0x081U
+#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
+#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
+
 
 
 /* =========================

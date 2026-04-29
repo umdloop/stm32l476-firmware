@@ -429,7 +429,7 @@ void l298n_stepper_system_controller(void){
 
 			if (request_status){
 
-				(void)CanParams_SetInt32(status_param_names_R[i], (int32_t)l298n->status);
+				(void)CanParams_SetInt32(status_param_names_R[i], (int32_t)(drivers[i].status));
 				(void)CanSystem_Send(status_param_names_R[i]);
 
 			}
