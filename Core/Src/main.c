@@ -15,8 +15,7 @@
 #include "../../App/Inc/servo_system.h"
 #include "../../App/Inc/dbc_examples_system.h"
 #include "../../App/Inc/test_pwm_system.h"
-#include "../../App/Inc/l298n_stepper_system.h"
-
+#include "../../App/Inc/dc_motor_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -37,9 +36,8 @@ int main(void)
   /* Core application systems */
   RR_AddController(pcb_led_system_controller);
   RR_AddController(heartbeat_system_controller);
-
-
-  //RR_AddController(servo_system_controller);
+  // RR_AddController(servo_system_controller);
+  // RR_AddController(dc_motor_system_controller);
 
   /* Optional example/demo systems. Uncomment when you want to exercise the
    * CAN API or canned DBC response flows from a bus analyzer.
