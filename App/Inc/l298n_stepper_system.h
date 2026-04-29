@@ -9,32 +9,11 @@ extern "C" {
 #include <stdint.h>
 #include "stm32l4xx.h"
 
-/*
- * Rename this file pair and rename the function prefixes below.
- *
- * Recommended pattern:
- *   my_feature_system.h
- *   my_feature_system.c
- *
- *   bool my_feature_system_init(void);
- *   void my_feature_system_controller(void);
- */
+
 
 
 typedef volatile uint32_t* TIMER_CHANNEL;
 typedef	uint16_t GPIO_PIN;
-
-//typedef struct{
-//
-//
-//	TIMER_CHANNEL 	channel;
-//	TIM_TypeDef* 	instance;
-//	GPIO_TypeDef* 	port;
-//	GPIO_PIN 		pin;
-//
-//	uint32_t 		alternate_func;
-//
-//} PWM_CHANNEL;
 
 typedef struct{
 
@@ -68,8 +47,8 @@ typedef struct{
 	uint8_t current_step;
 	uint8_t dir;
 
-	uint32_t max_time_ms; //max time
-	uint32_t current_time_running_ms;//how long its been running
+	uint32_t max_time_ms; //max time (currently not implemented)
+	uint32_t current_time_running_ms;//how long its been running (not implemented)
 
 	uint8_t status;
 
@@ -85,7 +64,7 @@ typedef struct{
  *
  */
 
-#define NUM_STEPPERS 1 //replace w number of steppers
+#define NUM_STEPPERS 0//replace w number of steppers
 
 //EXAMPLE
 
@@ -93,35 +72,23 @@ extern l298n_stepper_driver_t drivers[NUM_STEPPERS]; // needs to be defined in t
 extern TIM_TypeDef* global_interrupt_clock;
 extern uint32_t l298n_stepper_timer_period_us; //assumes clock speed is 8mhz
 
-#define STEPPER_0_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_0"
-#define STEPPER_1_VEL_PARAM_NAME "SCIENCE_STEPPER_PCB_C.stepper_velocity_target_1"
+#define STEPPER_0_VEL_PARAM_NAME ""
 
 extern char* vel_param_names[NUM_STEPPERS];
 
 
-/*
- * Initializes any one-time state for the system.
- *
- * Returns:
- *   true  -> init succeeded
- *   false -> init failed
- *
- * Notes:
- * - Safe to call once at startup.
- * - You can also lazy-init from the controller if you prefer.
- */
 
-/*
- * Main scheduler callback for this system.
- *
- * Add this to main.c with:
- *   RR_AddController(copy_rename_me_system_controller);
- *
- * Notes:
- * - This should be non-blocking.
- * - Avoid HAL_Delay() here.
- * - Use HAL_GetTick() for timed behavior.
- */
+#define STEPPER_0_STATUS_PARAM_NAME_C ""
+
+extern char* status_param_names_C[NUM_STEPPERS];
+
+
+
+#define STEPPER_0_STATUS_PARAM_NAME_R ""
+
+extern char* status_param_names_R[NUM_STEPPERS];
+
+
 void l298n_stepper_system_controller(void);
 
 #ifdef __cplusplus
