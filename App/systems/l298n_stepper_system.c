@@ -425,7 +425,7 @@ void l298n_stepper_system_controller(void){
 
 		if(CanParams_ProcEvent(status_param_names_C[i], &flag) && flag){
 
-			CanParams_GetBool(status_param_names_C[i], (int32_t*)&request_status);
+			CanParams_GetBool(status_param_names_C[i], &request_status);
 
 			if (request_status){
 
