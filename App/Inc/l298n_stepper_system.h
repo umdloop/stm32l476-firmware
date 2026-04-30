@@ -1,5 +1,5 @@
-#ifndef COPY_RENAME_ME_SYSTEM_H
-#define COPY_RENAME_ME_SYSTEM_H
+#ifndef L298N_STEPPER_SYSTEM_H
+#define L298N_STEPPER_SYSTEM_H
 
 #ifdef __cplusplus
 extern "C" {
