@@ -72,6 +72,10 @@ extern "C" {
 #define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_R     0x071U
 #define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_C    0x080U
 #define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_R    0x081U
+#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
+#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
+
+
 
 /* =========================
  * Servo application sizing
