@@ -271,125 +271,125 @@ static uint8_t s_inited = 0U;
 
 static const char* s_can_pos_tgt[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_position_target_0",
-  "SERVO_PCB_C.servo_position_target_1",
-  "SERVO_PCB_C.servo_position_target_2",
-  "SERVO_PCB_C.servo_position_target_3",
-  "SERVO_PCB_C.servo_position_target_4",
-  "SERVO_PCB_C.servo_position_target_5",
-  "SERVO_PCB_C.servo_position_target_6",
-  "SERVO_PCB_C.servo_position_target_7",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_0",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_1",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_2",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_3",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_4",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_5",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_6",
+  "SCIENCE_SERVO_PCB_C.servo_position_target_7",
 };
 
 static const char* s_can_vel_tgt[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_velocity_target_0",
-  "SERVO_PCB_C.servo_velocity_target_1",
-  "SERVO_PCB_C.servo_velocity_target_2",
-  "SERVO_PCB_C.servo_velocity_target_3",
-  "SERVO_PCB_C.servo_velocity_target_4",
-  "SERVO_PCB_C.servo_velocity_target_5",
-  "SERVO_PCB_C.servo_velocity_target_6",
-  "SERVO_PCB_C.servo_velocity_target_7",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_0",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_1",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_2",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_3",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_4",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_5",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_6",
+  "SCIENCE_SERVO_PCB_C.servo_velocity_target_7",
 };
 
 static const char* s_can_state_req[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_state_req_event_0",
-  "SERVO_PCB_C.servo_state_req_event_1",
-  "SERVO_PCB_C.servo_state_req_event_2",
-  "SERVO_PCB_C.servo_state_req_event_3",
-  "SERVO_PCB_C.servo_state_req_event_4",
-  "SERVO_PCB_C.servo_state_req_event_5",
-  "SERVO_PCB_C.servo_state_req_event_6",
-  "SERVO_PCB_C.servo_state_req_event_7",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_0",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_1",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_2",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_3",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_4",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_5",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_6",
+  "SCIENCE_SERVO_PCB_C.servo_state_req_event_7",
 };
 
 static const char* s_can_status_req[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_status_req_event_0",
-  "SERVO_PCB_C.servo_status_req_event_1",
-  "SERVO_PCB_C.servo_status_req_event_2",
-  "SERVO_PCB_C.servo_status_req_event_3",
-  "SERVO_PCB_C.servo_status_req_event_4",
-  "SERVO_PCB_C.servo_status_req_event_5",
-  "SERVO_PCB_C.servo_status_req_event_6",
-  "SERVO_PCB_C.servo_status_req_event_7",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_0",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_1",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_2",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_3",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_4",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_5",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_6",
+  "SCIENCE_SERVO_PCB_C.servo_status_req_event_7",
 };
 
 static const char* s_can_maint_cmd[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_maintenance_cmd_0",
-  "SERVO_PCB_C.servo_maintenance_cmd_1",
-  "SERVO_PCB_C.servo_maintenance_cmd_2",
-  "SERVO_PCB_C.servo_maintenance_cmd_3",
-  "SERVO_PCB_C.servo_maintenance_cmd_4",
-  "SERVO_PCB_C.servo_maintenance_cmd_5",
-  "SERVO_PCB_C.servo_maintenance_cmd_6",
-  "SERVO_PCB_C.servo_maintenance_cmd_7",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_0",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_1",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_2",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_3",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_4",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_5",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_6",
+  "SCIENCE_SERVO_PCB_C.servo_maintenance_cmd_7",
 };
 
 static const char* s_can_spec_req[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_C.servo_spec_req_event_0",
-  "SERVO_PCB_C.servo_spec_req_event_1",
-  "SERVO_PCB_C.servo_spec_req_event_2",
-  "SERVO_PCB_C.servo_spec_req_event_3",
-  "SERVO_PCB_C.servo_spec_req_event_4",
-  "SERVO_PCB_C.servo_spec_req_event_5",
-  "SERVO_PCB_C.servo_spec_req_event_6",
-  "SERVO_PCB_C.servo_spec_req_event_7",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_0",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_1",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_2",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_3",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_4",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_5",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_6",
+  "SCIENCE_SERVO_PCB_C.servo_spec_req_event_7",
 };
 
 static const char* s_can_pos_out[SERVO_CAN_COUNT][3] =
 {
   // Servo 0
   {
-    "SERVO_PCB_R.servo_position_pos_resp_0", // Position Command Response
-    "SERVO_PCB_R.servo_position_vel_resp_0", // Velocity Command Response
-    "SERVO_PCB_R.servo_position_state_resp_0" // Motor State Command Response
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_0", // Position Command Response
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_0", // Velocity Command Response
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_0" // Motor State Command Response
   },
   // Servo 1
   {
-    "SERVO_PCB_R.servo_position_pos_resp_1",
-    "SERVO_PCB_R.servo_position_vel_resp_1",
-    "SERVO_PCB_R.servo_position_state_resp_1"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_1",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_1",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_1"
   },
   // Servo 2
   {
-    "SERVO_PCB_R.servo_position_pos_resp_2",
-    "SERVO_PCB_R.servo_position_vel_resp_2",
-    "SERVO_PCB_R.servo_position_state_resp_2"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_2",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_2",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_2"
   },
   // Servo 3
   {
-    "SERVO_PCB_R.servo_position_pos_resp_3",
-    "SERVO_PCB_R.servo_position_vel_resp_3",
-    "SERVO_PCB_R.servo_position_state_resp_3"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_3",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_3",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_3"
   },
   // Servo 4
   {
-    "SERVO_PCB_R.servo_position_pos_resp_4",
-    "SERVO_PCB_R.servo_position_vel_resp_4",
-    "SERVO_PCB_R.servo_position_state_resp_4"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_4",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_4",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_4"
   },
   // Servo 5
   {
-    "SERVO_PCB_R.servo_position_pos_resp_5",
-    "SERVO_PCB_R.servo_position_vel_resp_5",
-    "SERVO_PCB_R.servo_position_state_resp_5"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_5",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_5",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_5"
   },
   // Servo 6
   {
-    "SERVO_PCB_R.servo_position_pos_resp_6",
-    "SERVO_PCB_R.servo_position_vel_resp_6",
-    "SERVO_PCB_R.servo_position_state_resp_6"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_6",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_6",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_6"
   },
   // Servo 7
   {
-    "SERVO_PCB_R.servo_position_pos_resp_7",
-    "SERVO_PCB_R.servo_position_vel_resp_7",
-    "SERVO_PCB_R.servo_position_state_resp_7"
+    "SCIENCE_SERVO_PCB_R.servo_position_pos_resp_7",
+    "SCIENCE_SERVO_PCB_R.servo_position_vel_resp_7",
+    "SCIENCE_SERVO_PCB_R.servo_position_state_resp_7"
   }
 };
 
@@ -397,112 +397,112 @@ static const char* s_can_vel_out[SERVO_CAN_COUNT][3] =
 {
   // Servo 0
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_0", // Position Command Response
-    "SERVO_PCB_R.servo_velocity_vel_resp_0", // Velocity Command Response
-    "SERVO_PCB_R.servo_velocity_state_resp_0" // Motor State Command Response
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_0", // Position Command Response
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_0", // Velocity Command Response
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_0" // Motor State Command Response
   },
   // Servo 1
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_1",
-    "SERVO_PCB_R.servo_velocity_vel_resp_1",
-    "SERVO_PCB_R.servo_velocity_state_resp_1"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_1",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_1",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_1"
   },
   // Servo 2
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_2",
-    "SERVO_PCB_R.servo_velocity_vel_resp_2",
-    "SERVO_PCB_R.servo_velocity_state_resp_2"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_2",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_2",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_2"
   },
   // Servo 3
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_3",
-    "SERVO_PCB_R.servo_velocity_vel_resp_3",
-    "SERVO_PCB_R.servo_velocity_state_resp_3"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_3",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_3",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_3"
   },
   // Servo 4
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_4",
-    "SERVO_PCB_R.servo_velocity_vel_resp_4",
-    "SERVO_PCB_R.servo_velocity_state_resp_4"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_4",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_4",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_4"
   },
   // Servo 5
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_5",
-    "SERVO_PCB_R.servo_velocity_vel_resp_5",
-    "SERVO_PCB_R.servo_velocity_state_resp_5"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_5",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_5",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_5"
   },
   // Servo 6
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_6",
-    "SERVO_PCB_R.servo_velocity_vel_resp_6",
-    "SERVO_PCB_R.servo_velocity_state_resp_6"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_6",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_6",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_6"
   },
   // Servo 7
   {
-    "SERVO_PCB_R.servo_velocity_pos_resp_7",
-    "SERVO_PCB_R.servo_velocity_vel_resp_7",
-    "SERVO_PCB_R.servo_velocity_state_resp_7"
+    "SCIENCE_SERVO_PCB_R.servo_velocity_pos_resp_7",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_vel_resp_7",
+    "SCIENCE_SERVO_PCB_R.servo_velocity_state_resp_7"
   }
 };
 
 static const char* s_can_motor_status[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_R.servo_status_0",
-  "SERVO_PCB_R.servo_status_1",
-  "SERVO_PCB_R.servo_status_2",
-  "SERVO_PCB_R.servo_status_3",
-  "SERVO_PCB_R.servo_status_4",
-  "SERVO_PCB_R.servo_status_5",
-  "SERVO_PCB_R.servo_status_6",
-  "SERVO_PCB_R.servo_status_7",
+  "SCIENCE_SERVO_PCB_R.servo_status_0",
+  "SCIENCE_SERVO_PCB_R.servo_status_1",
+  "SCIENCE_SERVO_PCB_R.servo_status_2",
+  "SCIENCE_SERVO_PCB_R.servo_status_3",
+  "SCIENCE_SERVO_PCB_R.servo_status_4",
+  "SCIENCE_SERVO_PCB_R.servo_status_5",
+  "SCIENCE_SERVO_PCB_R.servo_status_6",
+  "SCIENCE_SERVO_PCB_R.servo_status_7",
 };
 
 static const char* s_can_maint_succ[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_R.servo_maintenance_success_0",
-  "SERVO_PCB_R.servo_maintenance_success_1",
-  "SERVO_PCB_R.servo_maintenance_success_2",
-  "SERVO_PCB_R.servo_maintenance_success_3",
-  "SERVO_PCB_R.servo_maintenance_success_4",
-  "SERVO_PCB_R.servo_maintenance_success_5",
-  "SERVO_PCB_R.servo_maintenance_success_6",
-  "SERVO_PCB_R.servo_maintenance_success_7",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_0",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_1",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_2",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_3",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_4",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_5",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_6",
+  "SCIENCE_SERVO_PCB_R.servo_maintenance_success_7",
 };
 
 static const char* s_can_servo_type[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_R.servo_type_0",
-  "SERVO_PCB_R.servo_type_1",
-  "SERVO_PCB_R.servo_type_2",
-  "SERVO_PCB_R.servo_type_3",
-  "SERVO_PCB_R.servo_type_4",
-  "SERVO_PCB_R.servo_type_5",
-  "SERVO_PCB_R.servo_type_6",
-  "SERVO_PCB_R.servo_type_7",
+  "SCIENCE_SERVO_PCB_R.servo_type_0",
+  "SCIENCE_SERVO_PCB_R.servo_type_1",
+  "SCIENCE_SERVO_PCB_R.servo_type_2",
+  "SCIENCE_SERVO_PCB_R.servo_type_3",
+  "SCIENCE_SERVO_PCB_R.servo_type_4",
+  "SCIENCE_SERVO_PCB_R.servo_type_5",
+  "SCIENCE_SERVO_PCB_R.servo_type_6",
+  "SCIENCE_SERVO_PCB_R.servo_type_7",
 };
 
 static const char* s_can_pos_max[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_R.servo_position_max_0",
-  "SERVO_PCB_R.servo_position_max_1",
-  "SERVO_PCB_R.servo_position_max_2",
-  "SERVO_PCB_R.servo_position_max_3",
-  "SERVO_PCB_R.servo_position_max_4",
-  "SERVO_PCB_R.servo_position_max_5",
-  "SERVO_PCB_R.servo_position_max_6",
-  "SERVO_PCB_R.servo_position_max_7",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_0",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_1",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_2",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_3",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_4",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_5",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_6",
+  "SCIENCE_SERVO_PCB_R.servo_position_max_7",
 };
 
 static const char* s_can_vel_max[SERVO_CAN_COUNT] =
 {
-  "SERVO_PCB_R.servo_velocity_max_0",
-  "SERVO_PCB_R.servo_velocity_max_1",
-  "SERVO_PCB_R.servo_velocity_max_2",
-  "SERVO_PCB_R.servo_velocity_max_3",
-  "SERVO_PCB_R.servo_velocity_max_4",
-  "SERVO_PCB_R.servo_velocity_max_5",
-  "SERVO_PCB_R.servo_velocity_max_6",
-  "SERVO_PCB_R.servo_velocity_max_7",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_0",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_1",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_2",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_3",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_4",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_5",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_6",
+  "SCIENCE_SERVO_PCB_R.servo_velocity_max_7",
 };
 
 static uint8_t s_rx_inited = 0U;
@@ -1010,7 +1010,7 @@ void ServoSystem_Controller(void)
 
     {
       char event_name[64];
-      int n = snprintf(event_name, sizeof(event_name), "SCIENCE_SERVO_PCB_C.__event_mux_%u", (unsigned)(64U + i));
+      int n = snprintf(event_name, sizeof(event_name), "SCIENCE_SCIENCE_SERVO_PCB_C.__event_mux_%u", (unsigned)(64U + i));
       bool event = false;
       if ((n > 0) && ((size_t)n < sizeof(event_name)) && CanParams_ProcEvent(event_name, &event) && event)
       {
