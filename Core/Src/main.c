@@ -16,6 +16,7 @@
 #include "../../App/Inc/dbc_examples_system.h"
 #include "../../App/Inc/test_pwm_system.h"
 #include "../../App/Inc/dc_motor_system.h"
+#include "../../App/Inc/gpio_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -34,8 +35,8 @@ int main(void)
   RR_AddController(can_system_controller);
 
   /* Core application systems */
-  RR_AddController(pcb_led_system_controller);
-  RR_AddController(heartbeat_system_controller);
+  //RR_AddController(pcb_led_system_controller);
+  //RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
 
@@ -45,10 +46,15 @@ int main(void)
   // RR_AddController(ex_system_controller);
   // RR_AddController(dbc_examples_system_controller);
   // RR_AddController(test_pwm_system_controller);
+  //RR_AddController(gpio_system_controller);
   while (1)
   {
     RR_Scheduler_Tick();
     // HAL_Delay(100); // Never use this except in the most basic testing.
     // CanSystem_SendRaw("081#1122334455667788");
+    GpioSystem_DigitalWrite(15, 'C', 1);
+    HAL_Delay(1);
+    GpioSystem_DigitalWrite(15, 'C', 0);
+    HAL_Delay(1);
   }
 }
