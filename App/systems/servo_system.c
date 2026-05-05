@@ -80,7 +80,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "DFRobot Dual Mode",
     .modes = { .position = true, .velocity = false },
-    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 500,
     .pwm_max_us = 2500,
@@ -100,7 +99,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "GoBilda Dual Mode 5-Turn",
     .modes = { .position = true, .velocity = false },
-    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 500,
     .pwm_max_us = 2500,
@@ -120,7 +118,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name  = "HiTec HS-5055MG",
     .modes = { .position = true, .velocity = false },
-    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 900,
     .pwm_max_us = 2100,
@@ -140,7 +137,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "FeeTech FT6335M",
     .modes = { .position = true, .velocity = false },
-    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 500,
     .pwm_max_us = 2500,
@@ -160,7 +156,6 @@ static const ServoDef_t s_servo_defs[] =
   {
       .name = "MG-90S",
       .modes = { .position = true, .velocity = false },
-      .type = SERVO_TYPE_STANDARD,
 
       .pwm_min_us = 1000,
       .pwm_max_us = 2000,
@@ -180,7 +175,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "GoBilda Dual Mode Standard",
     .modes = { .position = true, .velocity = false },
-    .type = SERVO_TYPE_STANDARD,
 
     .pwm_min_us = 500,
     .pwm_max_us = 2500,
@@ -200,7 +194,6 @@ static const ServoDef_t s_servo_defs[] =
   {
     .name = "GoBilda Dual Mode Continuous",
     .modes = { .position = false, .velocity = true },
-    .type = SERVO_TYPE_CONTINUOUS,
 
     .pwm_min_us = 900,
     .pwm_max_us = 2100,
@@ -300,7 +293,7 @@ static const char* s_can_vel_tgt[SERVO_CAN_COUNT] =
   "SERVO_PCB_C.servo_velocity_target_7",
 };
 
-static const char* s_can_pos_out[SERVO_CAN_COUNT] =
+static const char* s_can_state_req[SERVO_CAN_COUNT] =
 {
   "SERVO_PCB_C.servo_state_req_event_0",
   "SERVO_PCB_C.servo_state_req_event_1",
@@ -312,7 +305,7 @@ static const char* s_can_pos_out[SERVO_CAN_COUNT] =
   "SERVO_PCB_C.servo_state_req_event_7",
 };
 
-static const char* s_can_vel_out[SERVO_CAN_COUNT] =
+static const char* s_can_status_req[SERVO_CAN_COUNT] =
 {
   "SERVO_PCB_C.servo_status_req_event_0",
   "SERVO_PCB_C.servo_status_req_event_1",
