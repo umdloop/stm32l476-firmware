@@ -19,8 +19,8 @@ extern "C" {
  * =========================
  * Physical MCU pin used for the onboard status LED.
  */
-#define PROJECT_LED_GPIO_PORT                 GPIOC
-#define PROJECT_LED_GPIO_PIN                  GPIO_PIN_5
+#define PROJECT_LED_GPIO_PORT                 GPIOA
+#define PROJECT_LED_GPIO_PIN                  GPIO_PIN_10
 
 /* =========================
  * bxCAN timing configuration

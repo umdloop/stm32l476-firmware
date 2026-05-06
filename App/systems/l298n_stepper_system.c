@@ -1,5 +1,3 @@
-//#include "copy_rename_me_system.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -48,35 +46,49 @@
  * ===============================================================
  */
 
-char* vel_param_names[NUM_STEPPERS] = {};
-char* status_param_names_R[NUM_STEPPERS] = {};
-char* status_param_names_C[NUM_STEPPERS] = {};
+char* vel_param_names[NUM_STEPPERS] = {STEPPER_0_VEL_PARAM_NAME,STEPPER_1_VEL_PARAM_NAME};
+char* status_param_names_R[NUM_STEPPERS] = {STEPPER_0_STATUS_PARAM_NAME_R,STEPPER_1_STATUS_PARAM_NAME_R};
+char* status_param_names_C[NUM_STEPPERS] = {STEPPER_0_STATUS_PARAM_NAME_C,STEPPER_1_STATUS_PARAM_NAME_C};
 
 
 l298n_stepper_driver_t drivers[NUM_STEPPERS] = {
 
 
-//		{GPIOA, GPIO_PIN_6,
-//		GPIOA, GPIO_PIN_5,
-//		GPIOC, GPIO_PIN_4,
-//		GPIOA, GPIO_PIN_4,
-//		GPIOC, GPIO_PIN_5,
-//		GPIOA, GPIO_PIN_7,
-//
-//		400,
-//		0, (1<<31),0, 912,
-//		0,0,
-//		0,0, L298N_STEPPER_STATUS_UNDEFINED
-//		}
-//
-//
-//
-//
-//
-//
-//
+
+		{GPIOA, GPIO_PIN_6,
+		GPIOA, GPIO_PIN_5,
+		GPIOC, GPIO_PIN_4,
+		GPIOA, GPIO_PIN_4,
+		GPIOC, GPIO_PIN_5,
+		GPIOA, GPIO_PIN_7,
+
+		400,
+		0, (1<<31),0, 912,
+		0,0,
+		0,0, L298N_STEPPER_STATUS_UNDEFINED
+		},
 
 
+		{
+
+		GPIOB, GPIO_PIN_15,
+		GPIOB, GPIO_PIN_13,
+		GPIOC, GPIO_PIN_6,
+		GPIOB, GPIO_PIN_14,
+		GPIOB, GPIO_PIN_12,
+		GPIOB, GPIO_PIN_2,
+
+		400,
+		0, (1<<31),0, 912,
+		0,0,
+		0,0, L298N_STEPPER_STATUS_UNDEFINED
+
+
+
+
+
+
+		}
 
 
 
