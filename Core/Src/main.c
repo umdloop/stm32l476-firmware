@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdio.h>
 
 /* Platform */
 #include "../../Platform/Inc/system_clock.h"
@@ -35,10 +36,11 @@ int main(void)
   RR_AddController(can_system_controller);
 
   /* Core application systems */
-  //RR_AddController(pcb_led_system_controller);
-  //RR_AddController(heartbeat_system_controller);
+  RR_AddController(pcb_led_system_controller);
+  // RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
+  RR_AddController(gpio_system_controller);
 
   /* Optional example/demo systems. Uncomment when you want to exercise the
    * CAN API or canned DBC response flows from a bus analyzer.
@@ -46,15 +48,27 @@ int main(void)
   // RR_AddController(ex_system_controller);
   // RR_AddController(dbc_examples_system_controller);
   // RR_AddController(test_pwm_system_controller);
-  //RR_AddController(gpio_system_controller);
   while (1)
   {
     RR_Scheduler_Tick();
     // HAL_Delay(100); // Never use this except in the most basic testing.
     // CanSystem_SendRaw("081#1122334455667788");
-    GpioSystem_DigitalWrite(15, 'C', 1);
-    HAL_Delay(1);
-    GpioSystem_DigitalWrite(15, 'C', 0);
-    HAL_Delay(1);
+    //GpioSystem_DigitalWrite(4, 'C', 1);
+    //HAL_Delay(1);
+    //GpioSystem_DigitalWrite(4, 'C', 0);
+    //HAL_Delay(1);
+    /*
+    int value = GpioSystem_AnalogRead(4, 'C', 1024);
+
+    char can_msg[32];
+
+    snprintf(can_msg,
+             sizeof(can_msg),
+             "123#%04X000000000000",
+             (uint16_t)value);
+    CanSystem_SendRaw(can_msg);
+    */
+
+    GpioSystem_DigitalAssign(4, 'C', "POWER_PCB_C.pcb_led_status");
   }
 }

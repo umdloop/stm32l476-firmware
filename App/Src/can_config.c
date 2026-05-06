@@ -26,8 +26,6 @@ const uint32_t g_can_rx_id_filter[] =
 const uint32_t g_can_rx_id_filter[] =
 {
   /* empty = accept all */
-	0x080,
-	0x010,
 };
 #endif
 
