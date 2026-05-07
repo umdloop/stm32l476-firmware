@@ -69,6 +69,6 @@ int main(void)
     CanSystem_SendRaw(can_msg);
     */
 
-    GpioSystem_DigitalAssign(4, 'C', "POWER_PCB_C.pcb_led_status");
+    GpioSystem_DigitalAssign(4, 'C', "POWER_PCB_C.kill_all_power");
   }
 }
