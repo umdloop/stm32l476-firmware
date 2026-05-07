@@ -51,7 +51,7 @@ void heartbeat_system_controller(void)
          * Send heartbeat response.
          * Legacy API does: set + schedule TX immediately.
          */
-        (void)CanParams_SetBool("SCIENCE_STEPPER_PCB_C.pcb_heartbeat_success", true);
-        (void)CanSystem_Send("SCIENCE_STEPPER_PCB_C.pcb_heartbeat_success");
+        (void)CanParams_SetBool("SCIENCE_STEPPER_PCB_R.pcb_heartbeat_success", true);
+        (void)CanSystem_Send("SCIENCE_STEPPER_PCB_R.pcb_heartbeat_success");
     }
 }
