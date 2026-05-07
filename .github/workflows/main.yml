@@ -38,7 +38,7 @@ jobs:
             exit 1
           fi
 
-          arm-none-eabi-size Debug/stm32l476-firmware.elf
+          ls -lh Debug/stm32l476-firmware.elf
 
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4.6.1
