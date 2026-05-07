@@ -22,7 +22,7 @@ void pcb_led_system_controller(void)
   }
 
   bool on = false;
-  bool valid = CanParams_GetBool("POWER_PCB_C.pcb_led_status", &on);
+  bool valid = CanParams_GetBool("SCIENCE_DC_MOTOR_PCB_C.pcb_led_status", &on);
 
   /* Drive the physical LED */
   if (valid)
