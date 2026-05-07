@@ -10,14 +10,13 @@
 /* App */
 #include "../../App/Inc/rr_scheduler.h"
 #include "../../App/Inc/can_system.h"
-#include "../../App/Inc/pcb_led_system.h"
-#include "../../App/Inc/ex_system.h"
+#include "../../App/Inc/gpio_system.h"
 #include "../../App/Inc/heartbeat_system.h"
 #include "../../App/Inc/servo_system.h"
-#include "../../App/Inc/dbc_examples_system.h"
-#include "../../App/Inc/test_pwm_system.h"
 #include "../../App/Inc/dc_motor_system.h"
-#include "../../App/Inc/gpio_system.h"
+#include "../../App/Inc/l298n_stepper_system.h"
+#include "../../App/Inc/test_pwm_system.h"
+#include "../../App/Inc/copy_rename_me_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -25,7 +24,6 @@
 int main(void)
 {
   HAL_Init();
-
   Platform_SystemClock_Config();
 
   MX_GPIO_Init();
@@ -33,42 +31,25 @@ int main(void)
   MX_UART4_Init();
 
   RR_Scheduler_Init();
-  RR_AddController(can_system_controller);
+  RR_AddController(can_system_controller); // Needed for CAN communication
 
   /* Core application systems */
-  RR_AddController(pcb_led_system_controller);
+  RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
   // RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
-  RR_AddController(gpio_system_controller);
-
-  /* Optional example/demo systems. Uncomment when you want to exercise the
-   * CAN API or canned DBC response flows from a bus analyzer.
-   */
-  // RR_AddController(ex_system_controller);
-  // RR_AddController(dbc_examples_system_controller);
+  // RR_AddController(l298n_stepper_system_controller);
   // RR_AddController(test_pwm_system_controller);
+  // RR_AddController(copy_rename_me_system_controller);
+
+
+  RR_Scheduler_Tick(); // One tick to setup all the inits.
+
+  // System Specific Assignments
+  GpioSystem_DigitalAssign(5, 'C', "POWER_PCB_C.pcb_led_status");
+
   while (1)
   {
     RR_Scheduler_Tick();
-    // HAL_Delay(100); // Never use this except in the most basic testing.
-    // CanSystem_SendRaw("081#1122334455667788");
-    //GpioSystem_DigitalWrite(4, 'C', 1);
-    //HAL_Delay(1);
-    //GpioSystem_DigitalWrite(4, 'C', 0);
-    //HAL_Delay(1);
-    /*
-    int value = GpioSystem_AnalogRead(4, 'C', 1024);
-
-    char can_msg[32];
-
-    snprintf(can_msg,
-             sizeof(can_msg),
-             "123#%04X000000000000",
-             (uint16_t)value);
-    CanSystem_SendRaw(can_msg);
-    */
-
-    GpioSystem_DigitalAssign(4, 'C', "POWER_PCB_C.kill_all_power");
   }
 }
