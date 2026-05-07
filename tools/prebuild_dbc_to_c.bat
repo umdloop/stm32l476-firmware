@@ -2,13 +2,20 @@
 setlocal
 
 set SCRIPT_DIR=%~dp0
+set PROJECT_DIR=%SCRIPT_DIR%..
 
-py -3 "%SCRIPT_DIR%prebuild_dbc_to_c.py"
-if %ERRORLEVEL% EQU 0 exit /b 0
+where py >nul 2>nul
+if %errorlevel%==0 (
+    py -3 "%PROJECT_DIR%\tools\dbc_to_c.py" "%PROJECT_DIR%\App\dbc\4.13.2026.dbc" "%PROJECT_DIR%\App\dbc\can_dbc_text.c" --no-install-dbc
+    exit /b %errorlevel%
+)
 
-python "%SCRIPT_DIR%prebuild_dbc_to_c.py"
-if %ERRORLEVEL% EQU 0 exit /b 0
+where python >nul 2>nul
+if %errorlevel%==0 (
+    python "%PROJECT_DIR%\tools\dbc_to_c.py" "%PROJECT_DIR%\App\dbc\4.13.2026.dbc" "%PROJECT_DIR%\App\dbc\can_dbc_text.c" --no-install-dbc
+    exit /b %errorlevel%
+)
 
-echo Failed to regenerate App\dbc\can_dbc_text.c from App\dbc\4.13.2026.dbc
-echo Install Python 3 or regenerate App\dbc\can_dbc_text.c manually with tools\dbc_to_c.py.
+echo Python 3 was not found.
+echo Install Python 3 from python.org and make sure py or python is available in PATH.
 exit /b 1
