@@ -23,3 +23,4 @@ release
 *.cyclo
 *.map
 *.list
+"Debug/" 
