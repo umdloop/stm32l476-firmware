@@ -527,7 +527,6 @@ static int32_t s_last_spec_req[SERVO_CAN_COUNT];
 __attribute__((weak)) void ServoSystem_OnSetZero(uint8_t port)        { (void)port; }
 __attribute__((weak)) void ServoSystem_OnRequestVectors(uint8_t port) { (void)port; }
 __attribute__((weak)) void ServoSystem_OnStopMotor(uint8_t port)      { (void)port; }
-__attribute__((weak)) void ServoSystem_OnShutdownMotor(uint8_t port)  { (void)port; }
 __attribute__((weak)) void ServoSystem_OnClearErrors(uint8_t port)    { (void)port; }
 
 
@@ -825,15 +824,46 @@ static void init_internal_once(void)
   tim_start(TIM4);
 
   /* Default ports 0..8 to GOBILDA 5 Turn and turn on VCC */
-  for (uint8_t p = 0; p < SERVO_CAN_COUNT; p++)
-  {
-    s_ports[p].model_id = SERVO_MODEL_GOBILDA_STANDARD;
-    set_vcc(p, false);
-    set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].pwm_min_us);
+//  for (uint8_t p = 0; p < SERVO_CAN_COUNT; p++)
+//  {
+//    s_ports[p].model_id = SERVO_MODEL_GOBILDA_STANDARD;
+//    set_vcc(p, false);
+//    set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].pwm_min_us);
+//  }
+//
+//  s_ports[5].model_id = SERVO_MODEL_GOBILDA_CONTINUOUS;
+//  set_pwm_us(5, s_servo_defs[SERVO_MODEL_GOBILDA_CONTINUOUS].vel_neutral_us);
+
+
+
+  for (uint8_t p = 0; p < 5; p++){
+
+	  s_ports[p].model_id = SERVO_MODEL_GOBILDA_CONTINUOUS;
+
+	  set_vcc(p, false);
+	  set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].vel_neutral_us);
+
   }
 
-  s_ports[5].model_id = SERVO_MODEL_GOBILDA_CONTINUOUS;
-  set_pwm_us(5, s_servo_defs[SERVO_MODEL_GOBILDA_CONTINUOUS].vel_neutral_us);
+  s_ports[5].model_id = SERVO_MODEL_HS_5055MG;
+
+  set_vcc(5, false);
+  set_pwm_us(5, s_servo_defs[SERVO_MODEL_HS_5055MG].pwm_min_us);
+
+
+
+  s_ports[6].model_id = SERVO_MODEL_HS_5055MG;
+
+  set_vcc(6, false);
+  set_pwm_us(6, s_servo_defs[SERVO_MODEL_HS_5055MG].pwm_min_us);
+
+
+
+
+  s_ports[7].model_id = SERVO_MODEL_GOBILDA_STANDARD;
+
+  set_vcc(7, false);
+  set_pwm_us(7, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].pwm_min_us);
 
 
 
