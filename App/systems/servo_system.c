@@ -530,6 +530,9 @@ __attribute__((weak)) void ServoSystem_OnStopMotor(uint8_t port)      { (void)po
 __attribute__((weak)) void ServoSystem_OnShutdownMotor(uint8_t port)  { (void)port; }
 __attribute__((weak)) void ServoSystem_OnClearErrors(uint8_t port)    { (void)port; }
 
+
+
+
 /* =========================
  *  Helpers
  * ========================= */
@@ -554,6 +557,15 @@ static void set_vcc(uint8_t port, bool on)
 {
   HAL_GPIO_WritePin(s_hw[port].vcc_port, s_hw[port].vcc_pin,
                     on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+
+
+void ServoSystem_OnShutdownMotor(uint8_t port){
+
+	set_vcc(port, false);
+
+
 }
 
 /* TIM CCR write */
@@ -816,7 +828,7 @@ static void init_internal_once(void)
   for (uint8_t p = 0; p < SERVO_CAN_COUNT; p++)
   {
     s_ports[p].model_id = SERVO_MODEL_GOBILDA_STANDARD;
-    set_vcc(p, true);
+    set_vcc(p, false);
     set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].pwm_min_us);
   }
 
@@ -1117,7 +1129,7 @@ void ServoSystem_Controller(void)
           case 0: ServoSystem_OnSetZero(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
           case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
           case 2: ServoSystem_OnStopMotor(i); stop_motor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-          case 3: ServoSystem_OnShutdownMotor(i); set_vcc(i, false); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
+          case 3: ServoSystem_OnShutdownMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
           case 4: ServoSystem_OnClearErrors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
           default: (void)CanParams_SetInt32(s_can_maint_succ[i], 0); break;
         }
