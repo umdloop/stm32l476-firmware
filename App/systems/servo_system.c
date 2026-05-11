@@ -268,6 +268,7 @@ typedef struct
   float    target_position_deg;
   float    target_velocity_deg_s;
   uint16_t current_pwm_us;
+
 } ServoPortState_t;
 
 static ServoPortState_t s_ports[SERVO_PORT_COUNT];
@@ -1016,6 +1017,8 @@ bool ServoSystem_SetPositionDeg(uint8_t port, float position_deg)
   if (!compute_pwm_us_for_position(def, position_deg, &pwm_us))
     return false;
 
+  if (pwm_us == s_ports[port].current_pwm_us)
+	  return false;
   /* Always ensure power is on when commanding */
   set_vcc(port, true);
 
@@ -1040,6 +1043,9 @@ bool ServoSystem_SetVelocityDegS(uint8_t port, float velocity_deg_s)
   uint16_t pwm_us = 0;
   if (!compute_pwm_us_for_velocity(def, velocity_deg_s, &pwm_us))
     return false;
+
+  if (pwm_us == s_ports[port].current_pwm_us)
+	  return false;
 
   /* Always ensure power is on when commanding */
   set_vcc(port, true);
@@ -1092,94 +1098,106 @@ void ServoSystem_Controller(void)
     init_internal_once();
   }
 
+
   for (uint8_t i = 0; i < SERVO_CAN_COUNT; i++)
   {
     // Position Command Frame
     int32_t pos_tgt = 0;
-    if (CanParams_GetInt32(s_can_pos_tgt[i], &pos_tgt))
-    {
-      if (!s_rx_inited || (pos_tgt != s_last_pos_tgt[i]))
-      {
-        s_last_pos_tgt[i] = pos_tgt;
-        (void)ServoSystem_SetPositionDeg(i, (float)pos_tgt);
-      }
-    }
+
+	if (CanParams_GetInt32(s_can_pos_tgt[i], &pos_tgt))
+	{
+	  if (!s_rx_inited || (pos_tgt != s_last_pos_tgt[i]))
+	  {
+		s_last_pos_tgt[i] = pos_tgt;
+		(void)ServoSystem_SetPositionDeg(i, (float)pos_tgt);
+	  }
+	}
+
 
     // Velocity Command Frame
     int32_t vel_tgt = 0;
-    if (CanParams_GetInt32(s_can_vel_tgt[i], &vel_tgt))
-    {
-      if (!s_rx_inited || (vel_tgt != s_last_vel_tgt[i]))
-      {
-        s_last_vel_tgt[i] = vel_tgt;
-        (void)ServoSystem_SetVelocityDegS(i, (float)vel_tgt);
-      }
-    }
+
+	if (CanParams_GetInt32(s_can_vel_tgt[i], &vel_tgt))
+	{
+	  if (!s_rx_inited || (vel_tgt != s_last_vel_tgt[i]))
+	  {
+		s_last_vel_tgt[i] = vel_tgt;
+		(void)ServoSystem_SetVelocityDegS(i, (float)vel_tgt);
+	  }
+	}
+
 
     // Motor Status Frame
     int32_t status_req = 0;
-    if (CanParams_GetInt32(s_can_mot_status_req[i], &status_req))
-    {
-      if (!s_rx_inited || (status_req != s_last_status_req[i]))
-      {
-        s_last_status_req[i] = status_req;
-        if(status_req == 1)
-        {
-          ServoSystem_OnMotorStatusCmd(i);
-          s_last_status_req[i] = 0;
-        }
-      }
-    }
+
+	if (CanParams_GetInt32(s_can_mot_status_req[i], &status_req))
+	{
+	  if (!s_rx_inited || (status_req != s_last_status_req[i]))
+	  {
+		s_last_status_req[i] = status_req;
+		if(status_req == 1)
+		{
+		  ServoSystem_OnMotorStatusCmd(i);
+		  s_last_status_req[i] = 0;
+		}
+	  }
+	}
+
 
     // Motor State Frame
     int32_t state_req = 0;
-    if (CanParams_GetInt32(s_can_mot_state_req[i], &state_req))
-    {
 
-      if (!s_rx_inited || (state_req != s_last_state_req[i]))
-      {
-        s_last_state_req[i] = state_req;
-        if(state_req == 1)
-        {
-          publish_vectors(i);
-          s_last_state_req[i] = 0;
-        }
-      }
-    }
+	if (CanParams_GetInt32(s_can_mot_state_req[i], &state_req))
+	{
+
+	  if (!s_rx_inited || (state_req != s_last_state_req[i]))
+	  {
+		s_last_state_req[i] = state_req;
+		if(state_req == 1)
+		{
+		  publish_vectors(i);
+		  s_last_state_req[i] = 0;
+		}
+	  }
+	}
+
 
     // Maintenance Frame
     int32_t maint = 0;
-    if (CanParams_GetInt32(s_can_maint_cmd[i], &maint))
-    {
-      if (!s_rx_inited || (maint != s_last_maint_req[i]))
-      {
-        s_last_maint_req[i] = maint;
-        switch ((uint8_t)maint)
-        {
-          case 0: ServoSystem_OnSetZero(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-          case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
-          case 2: ServoSystem_OnStopMotor(i); stop_motor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-          case 3: ServoSystem_OnShutdownMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-          case 4: ServoSystem_OnClearErrors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-          default: (void)CanParams_SetInt32(s_can_maint_succ[i], 0); break;
-        }
-      }
-    }
+
+	if (CanParams_GetInt32(s_can_maint_cmd[i], &maint))
+	{
+	  if (!s_rx_inited || (maint != s_last_maint_req[i]))
+	  {
+		s_last_maint_req[i] = maint;
+		switch ((uint8_t)maint)
+		{
+		  case 0: ServoSystem_OnSetZero(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
+//		  case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
+		  case 1: ServoSystem_OnStopMotor(i); stop_motor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
+		  case 2: ServoSystem_OnShutdownMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
+		  case 3: ServoSystem_OnClearErrors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
+		  default: (void)CanParams_SetInt32(s_can_maint_succ[i], 0); break;
+		}
+	  }
+	}
+
 
     // Servo Specifications Frame
     int32_t spec_req = 0;
-    if (CanParams_GetInt32(s_can_spec_req[i], &spec_req))
-    {
-      if (!s_rx_inited || (spec_req != s_last_spec_req[i]))
-      {
-        s_last_spec_req[i] = spec_req;
-        if ((uint8_t)spec_req)
-        {
-          ServoSystem_OnMotorSpecCmd(i);
-          s_last_spec_req[i] = 0;
-        }
-      }
-    }
+	if (CanParams_GetInt32(s_can_spec_req[i], &spec_req))
+	{
+	  if (!s_rx_inited || (spec_req != s_last_spec_req[i]))
+	  {
+		s_last_spec_req[i] = spec_req;
+		if ((uint8_t)spec_req)
+		{
+		  ServoSystem_OnMotorSpecCmd(i);
+		  s_last_spec_req[i] = 0;
+		}
+	  }
+	}
+
   }
   s_rx_inited = 1U;
 }

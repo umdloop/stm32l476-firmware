@@ -66,7 +66,6 @@ bool ServoSystem_SetVelocityDegS(uint8_t port, float velocity_deg_s);
 void ServoSystem_OnSetZero(uint8_t port);
 void ServoSystem_OnRequestVectors(uint8_t port);
 void ServoSystem_OnStopMotor(uint8_t port);
-void ServoSystem_OnShutdownMotor(uint8_t port);
 void ServoSystem_OnClearErrors(uint8_t port);
 
 #ifdef __cplusplus
