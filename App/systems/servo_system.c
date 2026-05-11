@@ -1106,7 +1106,7 @@ void ServoSystem_Controller(void)
 
 	if (CanParams_GetInt32(s_can_pos_tgt[i], &pos_tgt))
 	{
-	  if (!s_rx_inited || (pos_tgt != s_last_pos_tgt[i]))
+	  if (s_rx_inited)
 	  {
 		s_last_pos_tgt[i] = pos_tgt;
 		(void)ServoSystem_SetPositionDeg(i, (float)pos_tgt);
@@ -1119,7 +1119,7 @@ void ServoSystem_Controller(void)
 
 	if (CanParams_GetInt32(s_can_vel_tgt[i], &vel_tgt))
 	{
-	  if (!s_rx_inited || (vel_tgt != s_last_vel_tgt[i]))
+	  if (s_rx_inited)
 	  {
 		s_last_vel_tgt[i] = vel_tgt;
 		(void)ServoSystem_SetVelocityDegS(i, (float)vel_tgt);
@@ -1132,7 +1132,7 @@ void ServoSystem_Controller(void)
 
 	if (CanParams_GetInt32(s_can_mot_status_req[i], &status_req))
 	{
-	  if (!s_rx_inited || (status_req != s_last_status_req[i]))
+	  if (s_rx_inited && (status_req != s_last_status_req[i]))
 	  {
 		s_last_status_req[i] = status_req;
 		if(status_req == 1)
@@ -1150,7 +1150,7 @@ void ServoSystem_Controller(void)
 	if (CanParams_GetInt32(s_can_mot_state_req[i], &state_req))
 	{
 
-	  if (!s_rx_inited || (state_req != s_last_state_req[i]))
+	  if (s_rx_inited && (state_req != s_last_state_req[i]))
 	  {
 		s_last_state_req[i] = state_req;
 		if(state_req == 1)
@@ -1167,7 +1167,7 @@ void ServoSystem_Controller(void)
 
 	if (CanParams_GetInt32(s_can_maint_cmd[i], &maint))
 	{
-	  if (!s_rx_inited || (maint != s_last_maint_req[i]))
+	  if (s_rx_inited && (maint != s_last_maint_req[i]))
 	  {
 		s_last_maint_req[i] = maint;
 		switch ((uint8_t)maint)
@@ -1187,7 +1187,7 @@ void ServoSystem_Controller(void)
     int32_t spec_req = 0;
 	if (CanParams_GetInt32(s_can_spec_req[i], &spec_req))
 	{
-	  if (!s_rx_inited || (spec_req != s_last_spec_req[i]))
+	  if (s_rx_inited && (spec_req != s_last_spec_req[i]))
 	  {
 		s_last_spec_req[i] = spec_req;
 		if ((uint8_t)spec_req)
