@@ -252,7 +252,7 @@ static ServoPortHw_t s_hw[SERVO_PORT_COUNT] =
   { GPIOB, GPIO_PIN_8,  GPIO_AF2_TIM4, TIM4, 3, GPIOC, GPIO_PIN_14, GPIOC, GPIO_PIN_1, true },
   { GPIOA, GPIO_PIN_3,  GPIO_AF1_TIM2, TIM2, 4, GPIOC, GPIO_PIN_7,  GPIOC, GPIO_PIN_2, true },
   { GPIOA, GPIO_PIN_7,  GPIO_AF2_TIM3, TIM3, 2, GPIOA, GPIO_PIN_8,  GPIOC, GPIO_PIN_3, true },
-  { GPIOB, GPIO_PIN_0,  GPIO_AF2_TIM3, TIM3, 3, GPIOB, GPIO_PIN_14, NULL, 0, false },
+  { GPIOB, GPIO_PIN_0,  GPIO_AF2_TIM3, TIM3, 3, GPIOB, GPIO_PIN_15, NULL, 0, false },
   { GPIOC, GPIO_PIN_6,  GPIO_AF2_TIM3, TIM3, 1, GPIOB, GPIO_PIN_10, NULL, 0, false },
   { GPIOA, GPIO_PIN_15, GPIO_AF1_TIM2, TIM2, 1, GPIOC, GPIO_PIN_11, NULL, 0, false },
   { GPIOB, GPIO_PIN_3,  GPIO_AF1_TIM2, TIM2, 2, GPIOC, GPIO_PIN_12, NULL, 0, false },
@@ -842,7 +842,7 @@ static void init_internal_once(void)
 	  s_ports[p].model_id = SERVO_MODEL_GOBILDA_CONTINUOUS;
 
 	  set_vcc(p, false);
-	  set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_STANDARD].vel_neutral_us);
+	  set_pwm_us(p, s_servo_defs[SERVO_MODEL_GOBILDA_CONTINUOUS].vel_neutral_us);
 
   }
 
