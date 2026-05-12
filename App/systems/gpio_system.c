@@ -666,6 +666,13 @@ void gpio_system_controller(void)
       HAL_GPIO_WritePin(s_assignments[i].port,
                         s_assignments[i].pin_mask,
                         value ? GPIO_PIN_SET : GPIO_PIN_RESET);
+      
+      // Retrieve the device id
+      char last_char = s_assignments[i].can_parameter[
+        strlen(s_assignments[i].can_parameter) - 1
+      ];
+      (void)CanParams_SetBool("FLUOROMETRY_PCB_R.led_io_success_0", true);
+      (void)CanSystem_Send("FLUOROMETRY_PCB_R.led_io_success_0");
     }
   }
 }

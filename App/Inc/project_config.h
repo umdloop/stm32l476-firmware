@@ -74,19 +74,19 @@ extern "C" {
 #define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_R    0x081U
 #define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
 #define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
-#define PROJECT_CAN_ID_FLUOROMETRY_PCB_C      0x0110U
-#define PROJECT_CAN_ID_FLUOROMETRY_PCB_R      0x0111U
+#define PROJECT_CAN_ID_FLUOROMETRY_PCB_C      0x110U
+#define PROJECT_CAN_ID_FLUOROMETRY_PCB_R      0x111U
 
 
 
 /* =========================
- * Servo application sizing
+ * Port application sizing
  * =========================
- * Total physical ports on this board, and the subset actively controlled by
- * the current example servo application.
+ * Total physical ports on this board
  */
-#define PROJECT_SERVO_PORT_COUNT              8U
-#define PROJECT_SERVO_ACTIVE_CAN_COUNT        6U
+#define PROJECT_SERVO_PORT_COUNT              0U
+#define PROJECT_SERVO_ACTIVE_CAN_COUNT        0U
+#define PROJECT_GPIO_PORT_COUNT               1U // Not including motherboard LED
 
 /* =========================
  * Example/demo controller timing
@@ -103,7 +103,7 @@ extern "C" {
  * =========================
  * Canonical DBC file that the checked-in build rule regenerates from.
  */
-#define PROJECT_DBC_SOURCE_RELATIVE_PATH      "../dbc_latest_4.13.2026.dbc"
+#define PROJECT_DBC_SOURCE_RELATIVE_PATH      "../dbc_latest_file.dbc"
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,8 @@ extern "C" {
 #define GPIO_SYSTEM_STATE_LOW   (0)
 #define GPIO_SYSTEM_STATE_HIGH  (1)
 
+#define GPIO_PORT_COUNT (PROJECT_GPIO_PORT_COUNT)
+
 /* Round-robin scheduled controller. Applies digital CAN assignments. */
 void gpio_system_controller(void);
 

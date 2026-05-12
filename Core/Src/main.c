@@ -51,7 +51,7 @@ int main(void)
   GpioSystem_DigitalAssign(5, 'C', "FLUOROMETRY_PCB_C.pcb_led_status");
 
   // LED Command (???)
-  GpioSystem_DigitalAssign(14, 'F', "FLUOROMETRY_PCB_C.led_intensity_command_0");
+  GpioSystem_DigitalAssign(14, 'F', "FLUOROMETRY_PCB_C.led_io_command_0");
 
   while (1)
   {
