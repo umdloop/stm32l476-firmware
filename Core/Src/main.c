@@ -15,6 +15,7 @@
 #include "../../App/Inc/servo_system.h"
 #include "../../App/Inc/dc_motor_system.h"
 #include "../../App/Inc/l298n_stepper_system.h"
+#include "../../App/Inc/photodiode_system.h"
 #include "../../App/Inc/test_pwm_system.h"
 #include "../../App/Inc/copy_rename_me_system.h"
 
@@ -35,6 +36,7 @@ int main(void)
 
   /* Core application systems */
   RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
+  RR_AddController(photodiode_system_controller); // Implements OPT101 functionality
   // RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
@@ -46,7 +48,10 @@ int main(void)
   RR_Scheduler_Tick(); // One tick to setup all the inits.
 
   // System Specific Assignments
-  GpioSystem_DigitalAssign(5, 'C', "POWER_PCB_C.pcb_led_status");
+  GpioSystem_DigitalAssign(5, 'C', "FLUOROMETRY_PCB_C.pcb_led_status");
+
+  // LED Command (???)
+  GpioSystem_DigitalAssign(14, 'F', "FLUOROMETRY_PCB_C.led_intensity_command_0");
 
   while (1)
   {
