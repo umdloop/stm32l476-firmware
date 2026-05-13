@@ -527,7 +527,6 @@ static int32_t s_last_spec_req[SERVO_CAN_COUNT];
 /* Weak callbacks */
 __attribute__((weak)) void ServoSystem_OnSetZero(uint8_t port)        { (void)port; }
 __attribute__((weak)) void ServoSystem_OnRequestVectors(uint8_t port) { (void)port; }
-__attribute__((weak)) void ServoSystem_OnStopMotor(uint8_t port)      { (void)port; }
 __attribute__((weak)) void ServoSystem_OnClearErrors(uint8_t port)    { (void)port; }
 
 
@@ -557,15 +556,6 @@ static void set_vcc(uint8_t port, bool on)
 {
   HAL_GPIO_WritePin(s_hw[port].vcc_port, s_hw[port].vcc_pin,
                     on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-
-
-void ServoSystem_OnShutdownMotor(uint8_t port){
-
-	set_vcc(port, false);
-
-
 }
 
 /* TIM CCR write */
@@ -1064,19 +1054,32 @@ void ServoSystem_OnMotorStatusCmd(uint8_t port)
   // TODO: COMPLETE THIS WITH EVERYTHING ELSE
   if (state == GPIO_PIN_RESET) {
     (void)CanParams_SetInt32(s_can_motor_status[port], MOTOR_STATUS_STOPPED);
+    (void)CanSystem_Send(s_can_motor_status[port]);
   }
   else if(def->type == SERVO_TYPE_CONTINUOUS && state != GPIO_PIN_RESET){
     (void)CanParams_SetInt32(s_can_motor_status[port], MOTOR_STATUS_VELOCITY_CONTROL);
+    (void)CanSystem_Send(s_can_motor_status[port]);
   }
   else if(def->type == SERVO_TYPE_STANDARD && state != GPIO_PIN_RESET){
     (void)CanParams_SetInt32(s_can_motor_status[port], MOTOR_STATUS_POSITION_CONTROL);
+    (void)CanSystem_Send(s_can_motor_status[port]);
   }
   else if(def->type == SERVO_TYPE_UNDEFINED && state != GPIO_PIN_RESET){
     (void)CanParams_SetInt32(s_can_motor_status[port], MOTOR_STATUS_IDLE);
+    (void)CanSystem_Send(s_can_motor_status[port]);
   }
   else{
     (void)CanParams_SetInt32(s_can_motor_status[port], MOTOR_STATUS_UNDEFINED);
+    (void)CanSystem_Send(s_can_motor_status[port]);
   }
+}
+
+void ServoSystem_OnStopMotor(uint8_t port){
+	stop_motor(port);
+}
+
+void ServoSystem_OnShutdownMotor(uint8_t port){
+	set_vcc(port, false);
 }
 
 void ServoSystem_OnMotorSpecCmd(uint8_t port)
@@ -1088,6 +1091,10 @@ void ServoSystem_OnMotorSpecCmd(uint8_t port)
   (void)CanParams_SetInt32(s_can_servo_type[port], def->type);
   (void)CanParams_SetInt32(s_can_pos_max[port], def->max_rotation_deg);
   (void)CanParams_SetInt32(s_can_vel_max[port], def->max_speed_deg_s);
+
+  (void)CanSystem_Send(s_can_servo_type[port]);
+  (void)CanSystem_Send(s_can_pos_max[port]);
+  (void)CanSystem_Send(s_can_vel_max[port]);
 }
 
 void ServoSystem_Controller(void)
@@ -1172,12 +1179,12 @@ void ServoSystem_Controller(void)
 		s_last_maint_req[i] = maint;
 		switch ((uint8_t)maint)
 		{
-		  case 0: ServoSystem_OnSetZero(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-//		  case 1: ServoSystem_OnRequestVectors(i); publish_vectors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break; // TODO: Remove publish_vectors, since motor state frame already does this
-		  case 1: ServoSystem_OnStopMotor(i); stop_motor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-		  case 2: ServoSystem_OnShutdownMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-		  case 3: ServoSystem_OnClearErrors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); break;
-		  default: (void)CanParams_SetInt32(s_can_maint_succ[i], 0); break;
+		  case 0: (void)CanParams_SetInt32(s_can_maint_succ[i], 1); (void)CanSystem_Send(s_can_maint_succ[i]); break;
+		  case 1: ServoSystem_OnStopMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); (void)CanSystem_Send(s_can_maint_succ[i]); break;
+		  case 2: ServoSystem_OnShutdownMotor(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); (void)CanSystem_Send(s_can_maint_succ[i]); break;
+		  case 3: ServoSystem_OnClearErrors(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); (void)CanSystem_Send(s_can_maint_succ[i]); break;
+		  case 4: ServoSystem_OnSetZero(i); (void)CanParams_SetInt32(s_can_maint_succ[i], 1); (void)CanSystem_Send(s_can_maint_succ[i]); break;
+		  default: (void)CanParams_SetInt32(s_can_maint_succ[i], 0); (void)CanSystem_Send(s_can_maint_succ[i]); break;
 		}
 	  }
 	}
