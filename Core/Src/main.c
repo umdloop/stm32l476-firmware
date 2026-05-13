@@ -16,7 +16,7 @@
 #include "../../App/Inc/dc_motor_system.h"
 #include "../../App/Inc/l298n_stepper_system.h"
 #include "../../App/Inc/test_pwm_system.h"
-#include "../../App/Inc/copy_rename_me_system.h"
+#include "../../App/Inc/spectro_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -35,6 +35,7 @@ int main(void)
 
   /* Core application systems */
   RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
+  RR_AddController(spectro_system_controller); // Spectro System
   // RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);

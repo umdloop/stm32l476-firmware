@@ -12,26 +12,6 @@
 
 /*
  * ============================================================================
- *  Rename notes
- * ============================================================================
- *
- * Rename:
- *   copy_rename_me_system_init()
- *   copy_rename_me_system_controller()
- *
- * and the filenames:
- *   copy&renameME_system.h
- *   copy&renameME_system.c
- *
- * Suggested example:
- *   dc_motor_test_system.h
- *   dc_motor_test_system.c
- *   dc_motor_test_system_init()
- *   dc_motor_test_system_controller()
- */
-
-/*
- * ============================================================================
  *  Private state
  * ============================================================================
  */
@@ -56,6 +36,7 @@ bool spectro_system_init(void)
    * - write default CAN parameter values
    */
 
+
   s_initialized = true;
   s_last_tick_ms = HAL_GetTick();
 
@@ -77,7 +58,7 @@ void spectro_system_controller(void)
    */
   if (!s_initialized)
   {
-    if (!copy_rename_me_system_init())
+    if (!spectro_system_init())
     {
       return;
     }
