@@ -3,6 +3,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+/* CAN API */
+#include "can_system.h"
+#include "can_params.h"
+#include "project_config.h"
+
 #define SPECTRO_TIMER_CLK_HZ     8000000u
 
 #define TCD_FM_HZ                2000000u
@@ -236,7 +241,22 @@ void spectro_system_controller(void)
     }
 
     /*
-     * For pure timing bring-up, nothing is needed here.
-     * The timers run in hardware once initialized.
+     * RX: SPECTROSCOPY_PCB_C.pcb_led_status (mux page m17M)
+     *
+     * When the host sends this command, read the requested LED state,
+     * drive the onboard LED, and respond with success on _R.
      */
+    if (CanParams_ProcEvent("SPECTROSCOPY_PCB_C.pcb_led_status"))
+    {
+        bool led_on = false;
+        (void)CanParams_GetBool("SPECTROSCOPY_PCB_C.pcb_led_status", &led_on);
+
+        HAL_GPIO_WritePin(PROJECT_LED_GPIO_PORT,
+                          PROJECT_LED_GPIO_PIN,
+                          led_on ? GPIO_PIN_SET : GPIO_PIN_RESET);
+
+        /* Acknowledge back to the host */
+        (void)CanParams_SetBool("SPECTROSCOPY_PCB_R.pcb_led_success", true);
+        (void)CanSystem_Send("SPECTROSCOPY_PCB_R.pcb_led_success");
+    }
 }
