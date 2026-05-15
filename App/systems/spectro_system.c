@@ -246,7 +246,9 @@ void spectro_system_controller(void)
      * When the host sends this command, read the requested LED state,
      * drive the onboard LED, and respond with success on _R.
      */
-    if (CanParams_ProcEvent("SPECTROSCOPY_PCB_C.pcb_led_status"))
+    bool led_event = false;
+    (void)CanParams_ProcEvent("SPECTROSCOPY_PCB_C.pcb_led_status", &led_event);
+    if (led_event)
     {
         bool led_on = false;
         (void)CanParams_GetBool("SPECTROSCOPY_PCB_C.pcb_led_status", &led_on);
