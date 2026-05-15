@@ -16,26 +16,26 @@ typedef struct
 {
   bool position;
   bool velocity;
-} ServoModes_t;
+} ServoModes_t; // continuous or not
 
 typedef struct
 {
   bool has_feedback;
-} ServoFeedback_t;
+} ServoFeedback_t; // Feedback to correct the servo's position?
 
 typedef struct
 {
   const char* name;
 
-  ServoModes_t modes;
+  ServoModes_t modes; // continuous or not
 
-  uint16_t pwm_min_us;
-  uint16_t pwm_max_us;
+  uint16_t pwm_min_us; // minimum pwm signal
+  uint16_t pwm_max_us; // Maximum pwm signal (tied to rotation)
 
   float max_rotation_deg;
   float max_diff_position_deg;
 
-  float travel_deg_per_us;
+  float travel_deg_per_us; // angular velocity
 
   uint16_t vel_neutral_us;
   float    vel_deg_s_per_us;
@@ -44,21 +44,21 @@ typedef struct
 
   ServoFeedback_t feedback;
 
-} ServoDef_t;
+} ServoDef_t; // servo specific parameters
 
 static const ServoDef_t s_servo_defs[] =
 {
-  {
+  { // Baseline
     .name = "NONE",
     .modes = { .position = false, .velocity = false },
     .pwm_min_us = 0, .pwm_max_us = 0,
     .max_rotation_deg = 0.0f, .max_diff_position_deg = 0.0f,
     .travel_deg_per_us = 0.0f,
-    .vel_neutral_us = 1500, .vel_deg_s_per_us = 0.0f,
+    .vel_neutral_us = 1500, .vel_deg_s_per_us = 0.0f,        // What is velocity neutral? Would that be idle position
     .max_speed_deg_s = 0.0f,
     .feedback = { .has_feedback = false },
   },
-  {
+  { // type of servo
     .name = "Hitec HS-645MG",
     .modes = { .position = true, .velocity = false },
 

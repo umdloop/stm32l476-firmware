@@ -1,424 +1,242 @@
 #include "spectro_system.h"
-
+#include "main.h"
 #include <stdbool.h>
 #include <stdint.h>
 
-/* HAL / platform */
-#include "stm32l4xx_hal.h"
+#define SPECTRO_TIMER_CLK_HZ     8000000u
 
-/* CAN API */
-#include "can_system.h"
-#include "can_params.h"
-
-/*
- * ============================================================================
- *  Private state
- * ============================================================================
- */
+#define TCD_FM_HZ                2000000u
+#define TCD_ICG_HZ               133u        // approximate label only
+#define TCD_ICG_PERIOD_TICKS     60000u     // 7.5 ms at 80 MHz
+#define TCD_ICG_PULSE_TICKS      80u        // 10 us at 80 MHz
+#define TCD_SH_PERIOD_TICKS      160u       // 20 us at 80 MHz
+#define TCD_SH_PULSE_TICKS       32u        // 4 us at 80 MHz
 
 static bool s_initialized = false;
-static uint32_t s_last_tick_ms = 0U;
 
-/*
- * ============================================================================
- *  Init
- * ============================================================================
- */
+static void spectro_gpio_config_af(GPIO_TypeDef *gpio,
+                                   uint32_t pin,
+                                   uint32_t af)
+{
+    uint32_t afr_index = pin / 8u;
+    uint32_t afr_shift = (pin % 8u) * 4u;
+    uint32_t moder_shift = pin * 2u;
+    uint32_t speed_shift = pin * 2u;
+    uint32_t pupd_shift = pin * 2u;
+
+    // Alternate-function mode: MODER = 10
+    gpio->MODER &= ~(3u << moder_shift);
+    gpio->MODER |=  (2u << moder_shift);
+
+    // Push-pull output
+    gpio->OTYPER &= ~(1u << pin);
+
+    // Very high speed
+    gpio->OSPEEDR &= ~(3u << speed_shift);
+    gpio->OSPEEDR |=  (3u << speed_shift);
+
+    // No pull-up/pull-down
+    gpio->PUPDR &= ~(3u << pupd_shift);
+
+    // Alternate function selection
+    gpio->AFR[afr_index] &= ~(0xFu << afr_shift);
+    gpio->AFR[afr_index] |=  (af   << afr_shift);
+}
+
+static void spectro_gpio_init(void)
+{
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
+
+    // PA5 = TIM2_CH1 = ICG = AF1
+    spectro_gpio_config_af(GPIOA, 5u, 1u);
+
+    // PA6 = TIM3_CH1 = fM = AF2
+    spectro_gpio_config_af(GPIOA, 6u, 2u);
+
+    // PC8 = TIM8_CH3 = SH = AF3
+    spectro_gpio_config_af(GPIOC, 8u, 3u);
+}
+
+static void spectro_timer_clocks_enable(void)
+{
+    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
+    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN;
+    RCC->APB2ENR  |= RCC_APB2ENR_TIM8EN;
+
+    // Small dummy reads to allow clock domains to settle
+    (void)RCC->APB1ENR1;
+    (void)RCC->APB2ENR;
+}
+
+static void tim_pwm_ch1_init(TIM_TypeDef *tim,
+                             uint32_t arr,
+                             uint32_t ccr,
+                             bool active_low)
+{
+    tim->CR1 = 0;
+    tim->PSC = 0;
+    tim->ARR = arr - 1u;
+    tim->CCR1 = ccr;
+
+    // PWM mode 1 on CH1, preload enable
+    tim->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC1PE);
+    tim->CCMR1 |=  (6u << TIM_CCMR1_OC1M_Pos) | TIM_CCMR1_OC1PE;
+
+    // Enable CH1 output
+    tim->CCER &= ~(TIM_CCER_CC1P | TIM_CCER_CC1E);
+    if (active_low)
+    {
+        tim->CCER |= TIM_CCER_CC1P;
+    }
+    tim->CCER |= TIM_CCER_CC1E;
+
+    // Auto-reload preload
+    tim->CR1 |= TIM_CR1_ARPE;
+
+    // Force update event
+    tim->EGR = TIM_EGR_UG;
+}
+
+static void tim_pwm_ch3_init(TIM_TypeDef *tim,
+                             uint32_t arr,
+                             uint32_t ccr,
+                             bool active_low)
+{
+    tim->CR1 = 0;
+    tim->PSC = 0;
+    tim->ARR = arr - 1u;
+    tim->CCR3 = ccr;
+
+    // PWM mode 1 on CH3, preload enable
+    tim->CCMR2 &= ~(TIM_CCMR2_OC3M | TIM_CCMR2_OC3PE);
+    tim->CCMR2 |=  (6u << TIM_CCMR2_OC3M_Pos) | TIM_CCMR2_OC3PE;
+
+    // Enable CH3 output
+    tim->CCER &= ~(TIM_CCER_CC3P | TIM_CCER_CC3E);
+    if (active_low)
+    {
+        tim->CCER |= TIM_CCER_CC3P;
+    }
+    tim->CCER |= TIM_CCER_CC3E;
+
+    // TIM8 is an advanced timer; main output enable is required
+    if (tim == TIM8)
+    {
+        tim->BDTR |= TIM_BDTR_MOE;
+    }
+
+    tim->CR1 |= TIM_CR1_ARPE;
+    tim->EGR = TIM_EGR_UG;
+}
+
+static void spectro_timers_init(void)
+{
+    /*
+     * TIM3_CH1: fM on PA6
+     * 80 MHz / 40 = 2 MHz
+     */
+    tim_pwm_ch1_init(TIM3,
+                     4u,
+                     2u,
+                     false);
+
+    /*
+     * TIM2_CH1: ICG on PA5
+     * 80 MHz / 600000 = 133.333 Hz
+     * 800 ticks = 10 us pulse
+     *
+     * MCU pin is active high.
+     * After 74HC04 inverter, CCD sees low-going ICG pulse.
+     */
+    tim_pwm_ch1_init(TIM2,
+                     TCD_ICG_PERIOD_TICKS,
+                     TCD_ICG_PULSE_TICKS,
+                     false);
+
+    /*
+     * TIM2 master trigger.
+     *
+     * CubeMX used TIM_TRGO_ENABLE.
+     * For repeated synchronization of SH to each ICG frame, UPDATE is usually
+     * the more useful trigger source.
+     */
+    TIM2->CR2 &= ~TIM_CR2_MMS;
+    TIM2->CR2 |=  (2u << TIM_CR2_MMS_Pos);   // MMS = 010: update event as TRGO
+
+    /*
+     * TIM8_CH3: SH on PC8
+     * 320 ticks at 80 MHz = 4 us
+     *
+     * MCU pin is active low.
+     * After 74HC04 inverter, CCD sees active-high SH pulse.
+     */
+    tim_pwm_ch3_init(TIM8,
+                     TCD_SH_PERIOD_TICKS,
+                     TCD_SH_PULSE_TICKS,
+                     true);
+
+    /*
+     * TIM8 slave trigger selection.
+     *
+     * CubeMX used:
+     *   SlaveMode = TIM_SLAVEMODE_TRIGGER
+     *   InputTrigger = TIM_TS_ITR1
+     *
+     * Register meaning:
+     *   TS  = ITR1
+     *   SMS = Trigger mode
+     */
+    TIM8->SMCR &= ~(TIM_SMCR_TS | TIM_SMCR_SMS);
+    TIM8->SMCR |=  (1u << TIM_SMCR_TS_Pos);  // TS = ITR1
+    TIM8->SMCR |=  (6u << TIM_SMCR_SMS_Pos); // SMS = trigger mode
+
+    /*
+     * Optional phase tweak from Spectro.zip:
+     *   __HAL_TIM_SET_COUNTER(&htim2, 66);
+     */
+    TIM2->CNT = 66u;
+}
+
+static void spectro_timers_start(void)
+{
+    /*
+     * Start order copied conceptually from Spectro.zip:
+     *
+     * HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+     * HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+     * HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_3);
+     */
+    TIM3->CR1 |= TIM_CR1_CEN;
+    TIM8->CR1 |= TIM_CR1_CEN;
+    TIM2->CR1 |= TIM_CR1_CEN;
+}
 
 bool spectro_system_init(void)
 {
-  /*
-   * Put one-time setup here.
-   *
-   * Examples:
-   * - initialize local state
-   * - initialize platform peripherals used only by this system
-   * - write default CAN parameter values
-   */
+    if (s_initialized)
+    {
+        return true;
+    }
 
+    spectro_gpio_init();
+    spectro_timer_clocks_enable();
+    spectro_timers_init();
+    spectro_timers_start();
 
-  s_initialized = true;
-  s_last_tick_ms = HAL_GetTick();
-
-  return true;
+    s_initialized = true;
+    return true;
 }
-
-/*
- * ============================================================================
- *  Controller
- * ============================================================================
- */
 
 void spectro_system_controller(void)
 {
-  /*
-   * Lazy init pattern:
-   * If you want the system to self-start when first scheduled, keep this.
-   * Otherwise you can call init from main.c and remove this block.
-   */
-  if (!s_initialized)
-  {
-    if (!spectro_system_init())
+    if (!s_initialized)
     {
-      return;
+        (void)spectro_system_init();
     }
-  }
 
-  /*
-   * Example non-blocking periodic logic.
-   * Runs every 100 ms.
-   */
-  uint32_t now = HAL_GetTick();
-  if ((now - s_last_tick_ms) < 100U)
-  {
-    return;
-  }
-  s_last_tick_ms = now;
-
-  /*
-   * Put your real recurring logic here.
-   *
-   * Typical patterns:
-   * - read a CAN parameter
-   * - update hardware
-   * - publish a CAN response
-   * - process an event flag
-   */
-
-  /* Example placeholder:
-   *
-   * int32_t value = 0;
-   * if (CanParams_GetInt32("SCIENCE_DC_MOTOR_PCB_C.dc_motor_velocity_target_0", &value))
-   * {
-   *   // do something with value
-   * }
-   */
+    /*
+     * For pure timing bring-up, nothing is needed here.
+     * The timers run in hardware once initialized.
+     */
 }
-
-/*
- * ============================================================================
- *  CAN API QUICK REFERENCE
- * ============================================================================
- *
- * These are examples only.
- * Uncomment / adapt what you need.
- *
- * General rule in this repo:
- *   Preferred modern TX pattern:
- *     1) Set/update parameter
- *     2) Schedule send with CanSystem_Send()
- *
- *   Legacy combined helpers also exist:
- *     CanSystem_SetBool / SetInt32 / SetFloat
- *
- * ============================================================================
- */
-
-/*
---------------------------------------------------------------------------------
-1) READ A BOOL PARAMETER
---------------------------------------------------------------------------------
-
-bool led_on = false;
-if (CanParams_GetBool("POWER_PCB_C.pcb_led_status", &led_on))
-{
-  // led_on now contains the current stored value
-}
-
-Notes:
-- Use this when a DBC signal is 1 bit / boolean.
-- Returns false if the parameter name is wrong or not found.
-*/
-
-/*
---------------------------------------------------------------------------------
-2) READ AN INT32 PARAMETER
---------------------------------------------------------------------------------
-
-int32_t motor_cmd = 0;
-if (CanParams_GetInt32("SCIENCE_DC_MOTOR_PCB_C.dc_motor_velocity_target_0", &motor_cmd))
-{
-  // motor_cmd now has the latest decoded value
-}
-
-Notes:
-- Most integer signals in your repo will be read this way.
-- Signedness/scaling are handled by the CAN decode layer before storage.
-*/
-
-/*
---------------------------------------------------------------------------------
-3) READ A FLOAT PARAMETER
---------------------------------------------------------------------------------
-
-float value = 0.0f;
-if (CanParams_GetFloat("SOME_MESSAGE.some_scaled_signal", &value))
-{
-  // value now has the physical/scaled value
-}
-
-Notes:
-- Only use this if the DBC signal is stored as float in the param DB.
-- Typically signals with non-1 factor or non-0 offset become float params.
-*/
-
-/*
---------------------------------------------------------------------------------
-4) WRITE / SET A BOOL PARAMETER
---------------------------------------------------------------------------------
-
-(void)CanParams_SetBool("POWER_PCB_R.pcb_led_success", true);
-
-Notes:
-- This only updates the stored parameter.
-- It does NOT transmit by itself.
-- To actually send the containing CAN message, also call CanSystem_Send().
-*/
-
-/*
---------------------------------------------------------------------------------
-5) WRITE / SET AN INT32 PARAMETER
---------------------------------------------------------------------------------
-
-(void)CanParams_SetInt32("SCIENCE_DC_MOTOR_PCB_R.dc_motor_status_0", 1);
-
-Notes:
-- Preferred modern workflow is:
-- set param first
-- then schedule TX
-*/
-
-/*
---------------------------------------------------------------------------------
-6) WRITE / SET A FLOAT PARAMETER
---------------------------------------------------------------------------------
-
-(void)CanParams_SetFloat("SOME_MESSAGE.some_scaled_signal", 12.5f);
-
-Notes:
-- Same idea as int/bool: this updates stored state only.
-*/
-
-/*
---------------------------------------------------------------------------------
-7) SEND A MESSAGE / PAGE USING MODERN API
---------------------------------------------------------------------------------
-
-(void)CanParams_SetBool("POWER_PCB_R.pcb_led_success", true);
-(void)CanSystem_Send("POWER_PCB_R.pcb_led_success");
-
-Notes:
-- For non-mux messages, sending any signal in that message schedules the full
-  message to be transmitted with all current stored signal values.
-- For muxed messages, sending a signal schedules the mux page that signal
-  belongs to.
-- If other fields in that message were never set, they usually transmit as
-  their stored defaults (commonly zero).
-*/
-
-/*
---------------------------------------------------------------------------------
-8) SEND A NON-MUX MESSAGE BY MESSAGE NAME
---------------------------------------------------------------------------------
-
-(void)CanSystem_Send("POWER_PCB_R");
-
-Notes:
-- This only works for non-multiplexed messages.
-- For muxed messages, use a signal name instead.
-*/
-
-/*
---------------------------------------------------------------------------------
-9) LEGACY COMBINED SET + SEND HELPERS
---------------------------------------------------------------------------------
-
-(void)CanSystem_SetBool("POWER_PCB_R.pcb_led_success", true);
-(void)CanSystem_SetInt32("SCIENCE_DC_MOTOR_PCB_R.dc_motor_status_0", 1);
-(void)CanSystem_SetFloat("SOME_MESSAGE.some_scaled_signal", 12.5f);
-
-Notes:
-- These are convenient but considered legacy in this repo.
-- Preferred style is:
-    CanParams_SetX(...)
-    CanSystem_Send(...)
-- Still useful for quick bring-up/tests.
-*/
-
-/*
---------------------------------------------------------------------------------
-10) RAW MANUAL CAN SEND
---------------------------------------------------------------------------------
-
-(void)CanSystem_SendRaw("70#30FF7F");
-
-Notes:
-- Sends a raw CAN frame directly.
-- Format:
-    XXX#XXXXXXXXXXXXXXXX
-- Examples:
-    "70#300000"                // short payload
-    "70#30FF7F"                // 3-byte payload
-    "123#1122334455667788"     // 8-byte payload
-- This bypasses the DBC and parameter DB.
-- Great for bring-up and debugging.
-- Usually standard 11-bit IDs only unless your implementation was extended.
-*/
-
-/*
---------------------------------------------------------------------------------
-11) EVENT READ
---------------------------------------------------------------------------------
-
-bool fired = false;
-if (CanParams_GetEvent("SCIENCE_SERVO_PCB_C", &fired))
-{
-  if (fired)
-  {
-    // event currently set
-  }
-}
-
-Notes:
-- Events are useful for "message received" style behavior.
-- In your repo, receiving a message/page can flip an associated event.
-*/
-
-/*
---------------------------------------------------------------------------------
-12) EVENT PROCESS / CLEAR
---------------------------------------------------------------------------------
-
-if (CanParams_ProcEvent("SCIENCE_SERVO_PCB_C"))
-{
-  // event was set, and was consumed/cleared
-}
-
-Notes:
-- Good for one-shot handling:
-    if event happened -> act once -> clear
-*/
-
-/*
---------------------------------------------------------------------------------
-13) EVENT SET
---------------------------------------------------------------------------------
-
-(void)CanParams_SetEvent("MY_MESSAGE", true);
-
-Notes:
-- Use only if your code intentionally manipulates events directly.
-- Most event behavior in this repo comes from CAN RX or internal linkage.
-*/
-
-/*
---------------------------------------------------------------------------------
-14) DEBUG: LAST RX TICK
---------------------------------------------------------------------------------
-
-uint32_t tick = 0;
-if (CanSystem_DebugGetLastRxTick("SCIENCE_DC_MOTOR_PCB_C.dc_motor_velocity_target_0", &tick))
-{
-  // tick is HAL_GetTick() timestamp of last RX for that message/page
-}
-
-Notes:
-- Helpful for timeout detection or "is comms alive?" logic.
-*/
-
-/*
---------------------------------------------------------------------------------
-15) DEBUG: LAST TX TICK
---------------------------------------------------------------------------------
-
-uint32_t tick = 0;
-if (CanSystem_DebugGetLastTxTick("SCIENCE_DC_MOTOR_PCB_R.dc_motor_status_0", &tick))
-{
-  // tick is HAL_GetTick() timestamp of last TX for that message/page
-}
-
-Notes:
-- Useful for transmit confirmation timing/debugging.
-*/
-
-/*
---------------------------------------------------------------------------------
-16) DEBUG: CHECK IF A STANDARD ID IS ALLOWED BY FILTER POLICY
---------------------------------------------------------------------------------
-
-bool allowed = CanSystem_DebugIsStdIdAllowed(0x70);
-
-Notes:
-- This checks the repo's allowlist logic.
-- Useful when debugging why a frame is ignored.
-- Hardware filter and software allowlist are related but not identical in how
-  overflow cases are handled.
-*/
-
-/*
---------------------------------------------------------------------------------
-17) SIMPLE PERIODIC TRANSMIT PATTERN
---------------------------------------------------------------------------------
-
-static uint32_t last_tx = 0;
-uint32_t now = HAL_GetTick();
-
-if ((now - last_tx) >= 1000U)
-{
-  last_tx = now;
-
-  (void)CanParams_SetBool("POWER_PCB_R.pcb_led_success", true);
-  (void)CanSystem_Send("POWER_PCB_R.pcb_led_success");
-}
-
-Notes:
-- Preferred over HAL_Delay().
-- Keeps the scheduler responsive.
-*/
-
-/*
---------------------------------------------------------------------------------
-18) SIMPLE RX-DRIVEN HARDWARE CONTROL PATTERN
---------------------------------------------------------------------------------
-
-int32_t duty_cmd = 0;
-if (CanParams_GetInt32("SCIENCE_DC_MOTOR_PCB_C.dc_motor_velocity_target_0", &duty_cmd))
-{
-  // map duty_cmd into PWM / GPIO / analog output logic here
-}
-
-Notes:
-- This is the most common "controller" pattern in this repo:
-    read param -> drive hardware
-*/
-
-/*
---------------------------------------------------------------------------------
-19) AVOID THIS INSIDE CONTROLLERS
---------------------------------------------------------------------------------
-
-HAL_Delay(100);
-
-Notes:
-- Blocking delays stall the whole round-robin scheduler.
-- That pauses CAN RX/TX and all other systems.
-- Use HAL_GetTick()-based timing instead.
-*/
-
-/*
---------------------------------------------------------------------------------
-20) HOW TO ENABLE THIS SYSTEM
---------------------------------------------------------------------------------
-
-In main.c:
-
-  RR_AddController(copy_rename_me_system_controller);
-
-Typical order:
-  RR_Scheduler_Init();
-  RR_AddController(can_system_controller);
-  RR_AddController(copy_rename_me_system_controller);
-
-Notes:
-- Keep can_system_controller registered if your system depends on CAN params.
-*/
