@@ -45,14 +45,10 @@ int main(void)
   RR_AddController(can_system_controller); // Needed for CAN communication
 
   /* Core application systems */
-<<<<<<< Updated upstream
+  /* Core application systems */
   RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
   // RR_AddController(heartbeat_system_controller);
-=======
-  //RR_AddController(pcb_led_system_controller);
-  //RR_AddController(heartbeat_system_controller);
   RR_AddController(rs485_system_controller);
->>>>>>> Stashed changes
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
   // RR_AddController(l298n_stepper_system_controller);
