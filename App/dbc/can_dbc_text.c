@@ -3,7 +3,7 @@
 /*
  * AUTO-GENERATED FILE -- DO NOT EDIT BY HAND.
  *
- * Source: C:/Users/John/git/stm32l476-firmware/App/dbc/4.13.2026.dbc
+ * Source: C:/Users/dutta/Documents/Repositories/stm32l476-firmware/App/dbc/4.13.2026.dbc
  * Generator: tools/dbc_to_c.py
  *
  * This file intentionally contains only BO_ and SG_ records because

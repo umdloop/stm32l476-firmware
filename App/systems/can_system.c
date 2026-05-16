@@ -1063,7 +1063,7 @@ static void process_rx_fifo0(void)
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 {
-  if (hcan != &hcan1)
+  if(hcan != &hcan1)
     return;
   process_rx_fifo0();
 }
