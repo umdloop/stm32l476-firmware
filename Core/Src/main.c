@@ -13,10 +13,10 @@
 #include "../../App/Inc/gpio_system.h"
 #include "../../App/Inc/heartbeat_system.h"
 #include "../../App/Inc/servo_system.h"
-#include "../../App/Inc/dc_motor_system.h"
-#include "../../App/Inc/l298n_stepper_system.h"
-#include "../../App/Inc/test_pwm_system.h"
-#include "../../App/Inc/copy_rename_me_system.h"
+//#include "../../App/Inc/dc_motor_system.h"
+//#include "../../App/Inc/l298n_stepper_system.h"
+//#include "../../App/Inc/test_pwm_system.h"
+//#include "../../App/Inc/copy_rename_me_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -46,7 +46,7 @@ int main(void)
   RR_Scheduler_Tick(); // One tick to setup all the inits.
 
   // System Specific Assignments
-  GpioSystem_DigitalAssign(5, 'C', "SCIENCE_SERVO_PCB_C.pcb_led_status");
+  GpioSystem_DigitalAssign(5, 'C', "SWERVE_PCB_C.pcb_led_status");
 
   while (1)
   {

@@ -33,10 +33,10 @@ void heartbeat_system_controller(void)
 
     /*
      * Heartbeat delay comes from:
-     *   SCIENCE_SERVO_PCB_C.pcb_heartbeat_delay   (seconds)
+     *   SWERVE_PCB_C.pcb_heartbeat_delay   (seconds)
      */
     int32_t hb_s = 0;
-    if (!CanParams_GetInt32("SCIENCE_SERVO_PCB_C.pcb_heartbeat_delay", &hb_s))
+    if (!CanParams_GetInt32("SWERVE_PCB_C.pcb_heartbeat_delay", &hb_s))
         return;
 
     if (hb_s <= 0)
@@ -50,7 +50,7 @@ void heartbeat_system_controller(void)
          * Send heartbeat response.
          * Legacy API does: set + schedule TX immediately.
          */
-        (void)CanParams_SetBool("SCIENCE_SERVO_PCB_R.pcb_heartbeat_success", true);
-        (void)CanSystem_Send("SCIENCE_SERVO_PCB_R.pcb_heartbeat_success");
+        (void)CanParams_SetBool("SWERVE_PCB_R.pcb_heartbeat_success", true);
+        (void)CanSystem_Send("SWERVE_PCB_R.pcb_heartbeat_success");
     }
 }

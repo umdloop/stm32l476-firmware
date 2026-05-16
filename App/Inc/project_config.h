@@ -83,7 +83,7 @@ extern "C" {
  * Total physical ports on this board, and the subset actively controlled by
  * the current example servo application.
  */
-#define PROJECT_SERVO_PORT_COUNT              8U
+#define PROJECT_SERVO_PORT_COUNT              1U // EDITed for single servo for zed
 #define PROJECT_SERVO_ACTIVE_CAN_COUNT        6U
 
 /* =========================
