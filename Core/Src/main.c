@@ -12,10 +12,10 @@
 #include "../../App/Inc/can_system.h"
 #include "../../App/Inc/gpio_system.h"
 #include "../../App/Inc/heartbeat_system.h"
-#include "../../App/Inc/servo_system.h"
-#include "../../App/Inc/dc_motor_system.h"
-#include "../../App/Inc/l298n_stepper_system.h"
-#include "../../App/Inc/test_pwm_system.h"
+// #include "../../App/Inc/servo_system.h"
+// #include "../../App/Inc/dc_motor_system.h"
+// #include "../../App/Inc/l298n_stepper_system.h"
+// #include "../../App/Inc/test_pwm_system.h"
 #include "../../App/Inc/spectro_system.h"
 
 // Basic can testing (can raw)
@@ -36,7 +36,7 @@ int main(void)
   /* Core application systems */
   RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
   RR_AddController(spectro_system_controller); // Spectro System
-  // RR_AddController(heartbeat_system_controller);
+  RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
   // RR_AddController(l298n_stepper_system_controller);
@@ -47,7 +47,7 @@ int main(void)
   RR_Scheduler_Tick(); // One tick to setup all the inits.
 
   // System Specific Assignments
-  GpioSystem_DigitalAssign(5, 'C', "POWER_PCB_C.pcb_led_status");
+  GpioSystem_DigitalAssign(5, 'C', "SPECTROSCOPY_PCB_C.pcb_led_status");
 
   while (1)
   {

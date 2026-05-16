@@ -75,10 +75,10 @@ extern "C" {
 // #define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
 // #define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
 // Commented Out all other boards to isolate
-#define PROJECT_CAN_ID_SCIENCE_SPECTRO_PCB_C  0x100U
-#define PROJECT_CAN_ID_SCIENCE_SPECTRO_PCB_R  0x101U
+#define PROJECT_CAN_ID_SPECTROSCOPY_PCB_C  0x100U
+#define PROJECT_CAN_ID_SPECTROSCOPY_PCB_R  0x101U
 // Additional ID for the transmission of multiple CAN messages with the CCD data
-#define PROJECT_CAN_ID_SCIENCE_SPECTRO_PCB_T  0x102U
+#define PROJECT_CAN_ID_SPECTROSCOPY_PCB_T 0x102U
 
 
 /* =========================

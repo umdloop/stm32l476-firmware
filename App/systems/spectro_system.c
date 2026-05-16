@@ -8,6 +8,8 @@
 #include "can_params.h"
 #include "project_config.h"
 
+#include "gpio_system.h"
+
 #define SPECTRO_TIMER_CLK_HZ     8000000u
 
 #define TCD_FM_HZ                2000000u
@@ -18,6 +20,9 @@
 #define TCD_SH_PULSE_TICKS       32u        // 4 us at 80 MHz
 
 static bool s_initialized = false;
+
+volatile uint16_t spect_data[10];
+volatile uint8_t i = 0;
 
 static void spectro_gpio_config_af(GPIO_TypeDef *gpio,
                                    uint32_t pin,
@@ -73,6 +78,44 @@ static void spectro_timer_clocks_enable(void)
     (void)RCC->APB1ENR1;
     (void)RCC->APB2ENR;
 }
+
+static void enable_timer_nvic(void) {
+    IRQn_Type irqn;
+    irqn = TIM4_IRQn;
+    NVIC_SetPriority(irqn, 1);
+    NVIC_EnableIRQ(irqn);
+}
+
+static void init_global_clk(void){
+
+	__HAL_RCC_TIM4_CLK_ENABLE();
+	TIM4->PSC = 7;
+	TIM4->ARR = 16 -1;
+	TIM4->CR1 |= TIM_CR1_ARPE;
+	TIM4->DIER |= TIM_DIER_UIE;
+	TIM4->SR &= ~TIM_SR_UIF;
+	TIM4->CR1 |= TIM_CR1_CEN;
+
+
+    enable_timer_nvic();
+
+}
+
+// for now, interrupt *10* sequential times, writing the analog read into spect_data
+static void spectrometer_irq_handler(void) {
+    if (TIM4->SR & TIM_SR_UIF) {
+        TIM4->SR &= ~TIM_SR_UIF;
+        int temp = GpioSystem_AnalogRead(GPIO_PIN_3, 'A', 10);
+        if (temp > 0) {
+        	if (i == 10) {
+        		i = 0;
+        	}
+        	spect_data[i++] = temp;
+        }
+    }
+}
+
+__weak void TIM4_IRQHandler(void)          { spectrometer_irq_handler(); }
 
 static void tim_pwm_ch1_init(TIM_TypeDef *tim,
                              uint32_t arr,
@@ -200,7 +243,7 @@ static void spectro_timers_init(void)
      * Optional phase tweak from Spectro.zip:
      *   __HAL_TIM_SET_COUNTER(&htim2, 66);
      */
-    TIM2->CNT = 66u;
+    TIM2->CNT = 13u;
 }
 
 static void spectro_timers_start(void)
@@ -223,11 +266,13 @@ bool spectro_system_init(void)
     {
         return true;
     }
+    GpioSystem_AnalogRead(GPIO_PIN_3, 'A', 10);
 
     spectro_gpio_init();
     spectro_timer_clocks_enable();
     spectro_timers_init();
     spectro_timers_start();
+    init_global_clk();
 
     s_initialized = true;
     return true;
@@ -238,27 +283,5 @@ void spectro_system_controller(void)
     if (!s_initialized)
     {
         (void)spectro_system_init();
-    }
-
-    /*
-     * RX: SPECTROSCOPY_PCB_C.pcb_led_status (mux page m17M)
-     *
-     * When the host sends this command, read the requested LED state,
-     * drive the onboard LED, and respond with success on _R.
-     */
-    bool led_event = false;
-    (void)CanParams_ProcEvent("SPECTROSCOPY_PCB_C.pcb_led_status", &led_event);
-    if (led_event)
-    {
-        bool led_on = false;
-        (void)CanParams_GetBool("SPECTROSCOPY_PCB_C.pcb_led_status", &led_on);
-
-        HAL_GPIO_WritePin(PROJECT_LED_GPIO_PORT,
-                          PROJECT_LED_GPIO_PIN,
-                          led_on ? GPIO_PIN_SET : GPIO_PIN_RESET);
-
-        /* Acknowledge back to the host */
-        (void)CanParams_SetBool("SPECTROSCOPY_PCB_R.pcb_led_success", true);
-        (void)CanSystem_Send("SPECTROSCOPY_PCB_R.pcb_led_success");
     }
 }
