@@ -3,7 +3,6 @@
 #include "main.h"
 #include "can_params.h"
 #include "can_system.h"
-
 #include <string.h>
 #include <stdbool.h>
 
