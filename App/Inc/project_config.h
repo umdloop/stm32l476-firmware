@@ -68,12 +68,12 @@ extern "C" {
  */
 #define PROJECT_CAN_ID_POWER_PCB_C            0x010U
 #define PROJECT_CAN_ID_POWER_PCB_R            0x011U
-#define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_C     0x070U
-#define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_R     0x071U
-#define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_C    0x080U
-#define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_R    0x081U
-#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
-#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
+//#define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_C     0x070U
+//#define PROJECT_CAN_ID_SCIENCE_DC_MOTOR_R     0x071U
+//#define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_C    0x080U
+//#define PROJECT_CAN_ID_SCIENCE_SERVO_PCB_R    0x081U
+//#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_C  0x090U
+//#define PROJECT_CAN_ID_SCIENCE_STEPPER_PCB_R  0x091U
 
 
 
@@ -83,6 +83,9 @@ extern "C" {
  * Total physical ports on this board, and the subset actively controlled by
  * the current example servo application.
  */
+
+// IGNORE BELOW FOR POWER PCB
+
 #define PROJECT_SERVO_PORT_COUNT              8U
 #define PROJECT_SERVO_ACTIVE_CAN_COUNT        6U
 
@@ -92,6 +95,9 @@ extern "C" {
  * Periods used by optional example systems. Keeping them here makes it easy
  * to slow demos down when sniffing traffic on a live bus.
  */
+
+// IGNORE BELOW FOR POWER PCB
+
 #define PROJECT_EXAMPLE_STATUS_PERIOD_MS      1000U
 #define PROJECT_EXAMPLE_SPEC_PERIOD_MS        2000U
 #define PROJECT_EXAMPLE_API_PERIOD_MS         500U
