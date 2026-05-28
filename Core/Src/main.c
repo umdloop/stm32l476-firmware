@@ -46,7 +46,8 @@ int main(void)
   RR_Scheduler_Tick(); // One tick to setup all the inits.
 
   // System Specific Assignments
-  GpioSystem_DigitalAssign(5, 'C', "POWER_PCB_C.pcb_led_status");
+  GpioSystem_DigitalAssign(5, 'C', "FLUOROMETRY_PCB_C.pcb_led_status");
+  GpioSystem_DigitalAssign(10, 'A', "FLUOROMETRY_PCB_C.led_io_command_0");
 
   while (1)
   {

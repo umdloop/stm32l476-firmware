@@ -3,7 +3,7 @@
 /*
  * AUTO-GENERATED FILE -- DO NOT EDIT BY HAND.
  *
- * Source: C:/Users/John/git/stm32l476-firmware/App/dbc/4.13.2026.dbc
+ * Source: C:/Users/Didi/Documents/GitHub/stm32l476-firmware/App/dbc/5.12.2026.dbc
  * Generator: tools/dbc_to_c.py
  *
  * This file intentionally contains only BO_ and SG_ records because
@@ -339,6 +339,7 @@ const char* g_can_dbc_text =
 "	SG_ laser_command_success_0 m33M : 8|8@1- (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ laser_status_success_0 m49M : 8|8@1- (1,0) [0|1] \"bool\" Vector__XXX\n"
 "BO_ 272 FLUOROMETRY_PCB_C: 5 Vector__XXX\n"
+"	SG_ led_io_command_0 m65M : 8|1@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ diode_req_event_0 m32M : 8|1@1- (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ led_green_command_0 m49M : 16|8@1+ (1,0) [0|255] \"uint8\" Vector__XXX\n"
 "	SG_ led_blue_command_0 m49M : 24|8@1+ (1,0) [0|255] \"uint8\" Vector__XXX\n"
@@ -348,13 +349,15 @@ const char* g_can_dbc_text =
 "	SG_ pcb_heartbeat_delay m16M : 8|8@1+ (1,0) [0|255] \"sec\" Vector__XXX\n"
 "	SG_ pcb_led_status m17M : 8|1@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "BO_ 273 FLUOROMETRY_PCB_R: 3 Vector__XXX\n"
+"	SG_ led_io_success_0 m65M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ diode_value_0 m32M : 8|8@1+ (1,0) [0|255] \"\" Vector__XXX\n"
 "	SG_ led_rgb_success_0 m49M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ led_intensity_success_0 m33M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ req M : 0|8@1+ (1,0) [0|0] \"\" Vector__XXX\n"
 "	SG_ pcb_heartbeat_success m16M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ pcb_led_success m17M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
-"BO_ 288 DRIVE_LED_PCB_C: 4 Vector__XXX\n"
+"BO_ 288 DRIVE_LED_PCB_C: 5 Vector__XXX\n"
+"	SG_ led_io_command_0 m64M : 8|1@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ led_blue_command_0 m48M : 24|8@1+ (1,0) [0|255] \"uint8\" Vector__XXX\n"
 "	SG_ led_green_command_0 m48M : 16|8@1+ (1,0) [0|255] \"uint8\" Vector__XXX\n"
 "	SG_ led_red_command_0 m48M : 8|8@1+ (1,0) [0|255] \"uint8\" Vector__XXX\n"
@@ -363,6 +366,7 @@ const char* g_can_dbc_text =
 "	SG_ pcb_heartbeat_delay m16M : 8|8@1+ (1,0) [0|255] \"sec\" Vector__XXX\n"
 "	SG_ pcb_led_status m17M : 8|1@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "BO_ 289 DRIVE_LED_PCB_R: 3 Vector__XXX\n"
+"	SG_ led_io_success_0 m64M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ led_rgb_success_0 m48M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ led_intensity_success_0 m32M : 8|8@1+ (1,0) [0|1] \"bool\" Vector__XXX\n"
 "	SG_ req M : 0|8@1+ (1,0) [0|0] \"\" Vector__XXX\n"
@@ -761,4 +765,4 @@ const char* g_can_dbc_text =
 "	SG_ 97 servo_velocity_max_1 \"servo_velocity_max _# = 0 - 65,535 | Maximum servo velocity in degrees. Returns in little endian.\";\n"
 ;
 
-const size_t g_can_dbc_text_len = 745U;
+const size_t g_can_dbc_text_len = 749U;
