@@ -17,6 +17,7 @@
 #include "../../App/Inc/l298n_stepper_system.h"
 #include "../../App/Inc/test_pwm_system.h"
 #include "../../App/Inc/copy_rename_me_system.h"
+#include "../../App/Inc/analog_read_system.h"
 
 // Basic can testing (can raw)
 #include "can_system.h"
@@ -35,12 +36,13 @@ int main(void)
 
   /* Core application systems */
   RR_AddController(gpio_system_controller); // Runs onboard LED and standard GPIO functionality
-  // RR_AddController(heartbeat_system_controller);
+  RR_AddController(heartbeat_system_controller);
   // RR_AddController(servo_system_controller);
   // RR_AddController(dc_motor_system_controller);
   // RR_AddController(l298n_stepper_system_controller);
   // RR_AddController(test_pwm_system_controller);
   // RR_AddController(copy_rename_me_system_controller);
+  RR_AddController(analog_read_system_controller);
 
 
   RR_Scheduler_Tick(); // One tick to setup all the inits.
@@ -52,5 +54,6 @@ int main(void)
   while (1)
   {
     RR_Scheduler_Tick();
+
   }
 }
